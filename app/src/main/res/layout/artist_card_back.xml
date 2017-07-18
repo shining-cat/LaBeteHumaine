@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/bete_humaine_color_dark"> -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/card_background">
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="New Button"
+            android:id="@+id/artist_card_button_tatoos"
+            android:layout_weight="1"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:textColor="@color/bete_humaine_color_clear"
+            android:textStyle="bold"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="@dimen/text_size_artist_card_buttons" />
+        <!-- name of artist on back of cards removed :
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/artist_card_back_name_textfield"
+            android:textSize="@dimen/text_size_artist_name"
+            android:textColor="@color/bete_humaine_color_dark"
+            android:background="@color/bete_humaine_color_clear_semi_transparent"
+            android:gravity="center_horizontal"
+            android:layout_margin="0dp"
+            android:paddingTop="@dimen/padding_artist_card_text"
+            android:paddingBottom="@dimen/padding_artist_card_text" /> -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/bete_humaine_color_dark"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:text="New Button"
+            android:id="@+id/artist_card_button_drawings"
+            android:layout_weight="1"
+            android:padding="0dp"
+            android:layout_margin="0dp"
+            android:textColor="@color/bete_humaine_color_clear"
+            android:textStyle="bold"
+            android:background="?android:attr/selectableItemBackground"
+            android:textSize="@dimen/text_size_artist_card_buttons" />
+    </LinearLayout>
+</RelativeLayout>

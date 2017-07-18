@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#16215d</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="bete_humaine_color_clear">#ffcc66</color>
+    <color name="bete_humaine_color_clear_semi_transparent">#94ffcc66</color>
+    <color name="bete_humaine_color_medium">#8c6b28</color>
+    <color name="bete_humaine_color_dark">#3b2c0f</color>
+    <color name="bete_humaine_color_dark_semi_transparent">#c13b2c0f</color>
+    <color name="solid_black_semi_transparent">#be000000</color>
+
+</resources>

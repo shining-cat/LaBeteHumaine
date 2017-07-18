@@ -1,0 +1,124 @@
+<resources>
+    <string name="app_name">La Bete Humaine</string>
+    <string name="app_version">Version 1.2</string>
+    <string name="app_description">Tattoo shop book display</string>
+    <string name="app_made_by">Création et réalisation :</string>
+    <string name="app_made_name">Shiva Bernhard</string>
+    <string name="contact">sh1v4@shining-cat.fr</string>
+
+
+    <string name="action_settings">Paramètres</string>
+    <string name="select_artist_title">Les tatoueurs</string>
+
+
+    <string name="background_image_landscape_middle_size">background_landscape_middle_size.jpg</string>
+    <string name="background_image_landscape_xlarge">background_landscape_xlarge.jpg</string>
+    <string name="background_image_portrait_xlarge">background_portrait_xlarge.jpg</string>
+    <string name="logo_middle_size_image_file_name">logo_medium.png</string>
+    <string name="logo_xlarge_image_file_name">logo_xlarge.png</string>
+    <string name="logo_small_size_image_file_name">logo_small.png</string>
+
+    <string name="current_mode_pref_key">current_mode</string>
+    <string name="resting_screen_pref_key">rest_screen</string>
+    <string name="show_welcome_text_on_gallery_pref_key">show_text_on_gallery</string>
+    <string name="force_fit_artists_cards_to_gallery_screen_pref_key">gallery_force_fit</string>
+    <string name="custom_welcome_text_pref_key">welcome_text</string>
+    <string name="admin_code_pref_key">admin_code</string>
+    <string name="xml_file_address_pref_key">xml_file_address</string>
+    <string name="xml_file_last_download_pref_key">xml_last_dl</string>
+    <string name="xml_file_creation_date_pref_key">xml_creation_date</string>
+    <string name="datas_last_download_pref_key">datas_last_dl</string>
+    <string name="waiting_delay_pref_key">waiting_delay</string>
+    <string name="number_of_columns_pref_key">number_columns</string>
+
+
+    <string name="confirm_button_label">On y va!</string>
+    <string name="cancel_button_label">Oups!</string>
+    <string name="download_button_label">Télécharger</string>
+    <string name="edit_button_label">Modifier</string>
+
+    <string name="confirm_value_set_message">Modification enregistrée.</string>
+    <string name="attention_title">Hey!</string>
+    <string name="error_title">Une erreur est survenue</string>
+    <string name="error_never_downloaded">Il manque des données locales, rendez-vous dans les paramètres pour les télécharger.</string>
+    <string name="error_bad_url">L\'adresse entrée n\'est pas conforme.</string>
+    <string name="error_write_local_file">Impossible de sauvegarder le fichier local.</string>
+    <string name="error_no_internet_access">Pas d\'accès Internet.</string>
+    <string name="error_no_connection">Impossible de se connecter.</string>
+    <string name="error_xml_local_file_access">Fichier local XML non accessible. Essayer de le télécharger (à nouveau).</string>
+    <string name="error_xml_file_parsing">Fichier XML non lisible.</string>
+    <string name="error_writing_picture_to_disk_generik">Erreur générique d\'écriture.</string>
+    <string name="error_writing_picture_to_disk_double">Le fichier existe déjà : supprimer les doublons.</string>
+
+    <string name="error_pictures_older_than_xml">Les images n\'ont pas été mises à jour depuis le dernier téléchargement du fichier XML.</string>
+    <string name="error_loading_picture">Une erreur est survenue lors du chargement de l\'image.</string>
+    <string name="error_reading_pictures">Une erreur est survenue lors de la lecture des images.</string>
+
+
+    <string name="admin_code_request_label">Pour continuer, entrer le mot de passe</string>
+    <string name="admin_code_request_hint">Mot de passe?</string>
+    <string name="wrong_pass_message">Le mot de passe n\'est pas correct!</string>
+
+
+    <string name="xml_file_address_label">Adresse du fichier XML : </string>
+    <string name="xml_file_address_text_default">http://www.mon-site.com/mon-chemin/mon-fichier.xml</string>
+
+    <string name="xml_file_last_download_label">Télécharger le fichier XML maintenant</string>
+    <string name="xml_file_last_download_text_default">Fichier jamais téléchargé...</string>
+    <string name="xml_file_last_download_text">Fichier téléchargé le %1$s</string>
+    <string name="xml_file_downloading">Téléchargement du fichier XML.</string>
+    <string name="xml_file_download_complete_message">Fichier XML enregistré.</string>
+
+    <string name="profile_picture_loading_title">Téléchargement de l\'image de profil pour %1$s...</string>
+    <string name="pictures_loading_title">Téléchargement des %1$s pour %2$s...</string>
+    <string name="pictures_loading_message">Image %1$d sur %2$d...</string>
+    <string name="pictures_loaded_message">Téléchargement des images terminé!</string>
+    <string name="pictures_loading_error_message">Une erreur est survenue pendant le téléchargement des images...</string>
+    <string name="pictures_saving_error_message">Une erreur est survenue pendant l\'enregistrement des images...</string>
+
+    <string name="datas_last_download_label">Télécharger les données maintenant</string>
+    <string name="datas_last_download_text_default">Données jamais téléchargées...</string>
+    <string name="datas_last_download_text">Données téléchargées le %1$s</string>
+    <string name="datas_last_download_warning">L\'appli va télécharger tout le contenu depuis le site. Suivant la quantité de données à récupérer et la connexion disponible, cela peut prendre un peu de temps...</string>
+
+    <string name="waiting_delay_label">Délai avant apparition de l\'écran de repos</string>
+    <string name="waiting_delay_value">%1$d secondes</string>
+    <string name="waiting_delay_title">Délai avant apparition de l\'écran d\'attente :</string>
+    <string name="waiting_delay_unit">secondes</string>
+
+    <string name="rest_screen_choice_label">Choix de l\'écran de repos</string>
+    <string name="rest_screen_choice_detail">Choisir à quelle page l\'appli reviendra après le délai d\'inactivité : Message d\'accueil, ou Galerie des tatoueurs</string>
+    <string name="rest_screen_choice_waiting">Message</string>
+    <string name="rest_screen_choice_select">Galerie</string>
+
+    <string name="custom_welcome_text_label">Text du message d\'accueil : </string>
+    <string name="welcome_text_default">Bienvenue sur le book de La Bête Humaine.\n Toucher l\'écran pour démarrer...</string>
+
+    <string name="display_welcome_text_on_gallery_screen_label">Afficher l\'invite sur la galerie : </string>
+    <string name="display_welcome_text_on_gallery_screen_explanation">Afficher le texte du message d\'accueil sur la Galerie des tatoueurs (le message sera sur une seule ligne si possible)"</string>
+    <string name="display_welcome_text_on_gallery_screen_toggle_active">Oui</string>
+    <string name="display_welcome_text_on_gallery_screen_toggle_inactive">Non</string>
+
+    <string name="force_fit_gallery_label">Forcer la galerie à l\'écran : </string>
+    <string name="force_fit_gallery_explanation">Activer un scroll ou forcer toutes les cartes dans l\'écran pour la Galerie des tatoueurs"</string>
+    <string name="force_fit_gallery_toggle_active">Forcer</string>
+    <string name="force_fit_gallery_toggle_inactive">Scroll</string>
+
+    <string name="number_of_column_label">Nombre de colonnes dans la galerie</string>
+    <string name="number_of_column_value">%1$d colonnes</string>
+    <string name="number_of_column_unit">colonnes</string>
+    <string name="number_of_column_title">Nombre de colonnes dans la galerie</string>
+
+    <string name="admin_code_label">Code administration</string>
+    <string name="admin_code_explanation">Choisir un code pour activer le mode KIOSQUE.</string>
+    <string name="admin_code_toggle_active">Kiosque</string>
+    <string name="admin_code_toggle_inactive">Standard</string>
+    <string name="new_password_step1_title">Choisir un mot de passe</string>
+    <string name="new_password_step2_title">Confirmer le mot de passe</string>
+    <string name="different_passwords">Les mots de passe ne concordent pas!</string>
+    <string name="empty_password">Entrer un mot de passe vide... un peu niais, non?</string>
+
+    <string name="tattoos">Tattoos</string>
+    <string name="drawings">Dessins</string>
+
+</resources>

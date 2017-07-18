@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- dialog_fragment_welcome_text_edit.xml -->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:gravity="center_vertical|center_horizontal">
+
+
+    <EditText
+        android:id="@+id/welcome_text_field"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:imeOptions="actionDone"
+        android:layout_alignParentStart="false"
+        android:textAlignment="center" />
+
+</RelativeLayout>

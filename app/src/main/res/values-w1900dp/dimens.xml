@@ -1,0 +1,8 @@
+<resources>
+    <!-- dimensions values specific for really extra large screen
+    such as the galaxy view, which the app was first designed for -->
+    <dimen name="text_size_welcome_text">30sp</dimen>
+    <dimen name="text_size_artist_name">25sp</dimen>
+    <dimen name="text_size_artist_description">20sp</dimen>
+
+</resources>

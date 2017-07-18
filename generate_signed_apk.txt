@@ -1,0 +1,9 @@
+keystore password : shiva+03-05
+key password : celine+15-11
+
+android studio et le projet sont configurés pour générer automatiquement une apk signée
+ouvrir l'onglet (gauche) "Build Variants" et vérifier que "beteHumaineRelease" est sélectionné
+puis dans le menu "Build", cliquer "Build APK"
+l'apk sera générée dans D:\_OWNCLOUD\USBdisk\BOULOT\20160526_bete-humaine\DEV\LaBeteHumaine\app\build\outputs\apk
+
+la mise à jour peut être faite sans toucher aux données déjà téléchargées sur la tablette

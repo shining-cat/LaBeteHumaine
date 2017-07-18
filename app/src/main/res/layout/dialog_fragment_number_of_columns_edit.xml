@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:gravity="center_vertical|center_horizontal">
+
+
+    <EditText
+        android:id="@+id/txt_number_of_columns_value"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:imeOptions="actionDone"
+        android:layout_toLeftOf="@+id/number_of_columns_unit"
+        android:layout_alignParentStart="false"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/number_of_column_unit"
+        android:id="@+id/number_of_columns_unit"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="false"
+        android:layout_alignBaseline="@+id/txt_number_of_columns_value" />
+
+</RelativeLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_weight="1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal">
+    <FrameLayout
+        android:id="@+id/card_front"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/rounded_corners_shape">
+
+        <include layout="@layout/artist_card_front" />
+
+    </FrameLayout>
+    <FrameLayout
+        android:id="@+id/card_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corners_shape">
+
+        <include layout="@layout/artist_card_back" />
+
+    </FrameLayout>
+
+
+
+</FrameLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="fr.shining_cat.labetehumaine.MainActivity"
+    android:keepScreenOn="true"
+    android:id="@+id/activity_main_layout">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/toolbarHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:background="@color/solid_black_semi_transparent">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:elevation="4dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/main_background_imageView"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/main_logo_top_margin"
+            android:id="@+id/main_logo_imageView"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/welcome_text_default"
+            android:id="@+id/gallery_welcome_text_textView"
+            android:textColor="@color/bete_humaine_color_clear"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_welcome_text"
+            android:gravity="center_horizontal" />
+
+    </RelativeLayout>
+    <include layout="@layout/main_fragment_holder"/>
+
+</RelativeLayout>
