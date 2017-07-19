@@ -3,9 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="fr.shining_cat.labetehumaine.MainActivity">
     <item
+        android:id="@+id/open_form_button"
+        android:orderInCategory="100"
+        android:title="@string/open_form_button_label"
+        app:showAsAction="ifRoom"/>
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         android:icon="@drawable/ic_build_black_24dp"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 </menu>

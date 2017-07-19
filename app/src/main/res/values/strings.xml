@@ -8,6 +8,7 @@
 
 
     <string name="action_settings">Paramètres</string>
+    <string name="open_form_button_label">Formulaire</string>
     <string name="select_artist_title">Les tatoueurs</string>
 
 
@@ -64,22 +65,22 @@
     <string name="xml_file_address_text_default">http://www.mon-site.com/mon-chemin/mon-fichier.xml</string>
 
     <string name="xml_file_last_download_label">Télécharger le fichier XML maintenant</string>
-    <string name="xml_file_last_download_text_default">Fichier jamais téléchargé...</string>
+    <string name="xml_file_last_download_text_default">Fichier jamais téléchargé…</string>
     <string name="xml_file_last_download_text">Fichier téléchargé le %1$s</string>
     <string name="xml_file_downloading">Téléchargement du fichier XML.</string>
     <string name="xml_file_download_complete_message">Fichier XML enregistré.</string>
 
-    <string name="profile_picture_loading_title">Téléchargement de l\'image de profil pour %1$s...</string>
-    <string name="pictures_loading_title">Téléchargement des %1$s pour %2$s...</string>
-    <string name="pictures_loading_message">Image %1$d sur %2$d...</string>
+    <string name="profile_picture_loading_title">Téléchargement de l\'image de profil pour %1$s…</string>
+    <string name="pictures_loading_title">Téléchargement des %1$s pour %2$s…</string>
+    <string name="pictures_loading_message">Image %1$d sur %2$d…</string>
     <string name="pictures_loaded_message">Téléchargement des images terminé!</string>
-    <string name="pictures_loading_error_message">Une erreur est survenue pendant le téléchargement des images...</string>
-    <string name="pictures_saving_error_message">Une erreur est survenue pendant l\'enregistrement des images...</string>
+    <string name="pictures_loading_error_message">Une erreur est survenue pendant le téléchargement des images…</string>
+    <string name="pictures_saving_error_message">Une erreur est survenue pendant l\'enregistrement des images…</string>
 
     <string name="datas_last_download_label">Télécharger les données maintenant</string>
-    <string name="datas_last_download_text_default">Données jamais téléchargées...</string>
+    <string name="datas_last_download_text_default">Données jamais téléchargées…</string>
     <string name="datas_last_download_text">Données téléchargées le %1$s</string>
-    <string name="datas_last_download_warning">L\'appli va télécharger tout le contenu depuis le site. Suivant la quantité de données à récupérer et la connexion disponible, cela peut prendre un peu de temps...</string>
+    <string name="datas_last_download_warning">L\'appli va télécharger tout le contenu depuis le site. Suivant la quantité de données à récupérer et la connexion disponible, cela peut prendre un peu de temps…</string>
 
     <string name="waiting_delay_label">Délai avant apparition de l\'écran de repos</string>
     <string name="waiting_delay_value">%1$d secondes</string>
@@ -92,7 +93,7 @@
     <string name="rest_screen_choice_select">Galerie</string>
 
     <string name="custom_welcome_text_label">Text du message d\'accueil : </string>
-    <string name="welcome_text_default">Bienvenue sur le book de La Bête Humaine.\n Toucher l\'écran pour démarrer...</string>
+    <string name="welcome_text_default">Bienvenue sur le book de La Bête Humaine.\n Toucher l\'écran pour démarrer…</string>
 
     <string name="display_welcome_text_on_gallery_screen_label">Afficher l\'invite sur la galerie : </string>
     <string name="display_welcome_text_on_gallery_screen_explanation">Afficher le texte du message d\'accueil sur la Galerie des tatoueurs (le message sera sur une seule ligne si possible)"</string>
@@ -116,7 +117,7 @@
     <string name="new_password_step1_title">Choisir un mot de passe</string>
     <string name="new_password_step2_title">Confirmer le mot de passe</string>
     <string name="different_passwords">Les mots de passe ne concordent pas!</string>
-    <string name="empty_password">Entrer un mot de passe vide... un peu niais, non?</string>
+    <string name="empty_password">Entrer un mot de passe vide… un peu niais, non?</string>
 
     <string name="tattoos">Tattoos</string>
     <string name="drawings">Dessins</string>
