@@ -49,7 +49,7 @@ public class SaveRemoteXMLtoLocalFile extends AsyncTask<URL, Integer, Long> {
     }
 
     @Override
-    protected Long doInBackground(URL… params) {
+    protected Long doInBackground(URL... params) {
         if(MainActivity.DEBUG) {
             Log.i(TAG, "SaveRemoteXMLtoLocalFile::doInBackground");
         }

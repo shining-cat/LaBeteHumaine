@@ -91,12 +91,12 @@ public class BasicImageDownloader {
             }
 
             @Override
-            protected void onProgressUpdate(Integer… values) {
+            protected void onProgressUpdate(Integer... values) {
                 mImageLoaderListener.onProgressChange(values[0]);
             }
 
             @Override
-            protected Bitmap doInBackground(Void… params) {
+            protected Bitmap doInBackground(Void... params) {
                 Bitmap bitmap = null;
                 HttpURLConnection connection = null;
                 InputStream is = null;
@@ -247,7 +247,7 @@ public class BasicImageDownloader {
             private ImageError error;
 
             @Override
-            protected Void doInBackground(Void… params) {
+            protected Void doInBackground(Void... params) {
                 FileOutputStream fos = null;
                 try {
                     fos = new FileOutputStream(imageFile);
@@ -314,7 +314,7 @@ public class BasicImageDownloader {
     public static void readFromDiskAsync(@NonNull File imageFile, @NonNull final OnImageReadListener listener) {
         new AsyncTask<String, Void, Bitmap>() {
             @Override
-            protected Bitmap doInBackground(String… params) {
+            protected Bitmap doInBackground(String... params) {
                 return BitmapFactory.decodeFile(params[0]);
             }
 

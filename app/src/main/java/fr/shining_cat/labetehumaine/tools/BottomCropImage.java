@@ -10,7 +10,7 @@ import android.widget.ImageView;
 *       taken from http://stackoverflow.com/a/11603268/6463888
 *
  */
-public class BottomCropImage extends ImageView {
+public class BottomCropImage extends android.support.v7.widget.AppCompatImageView {
 
     public BottomCropImage(Context context) {
         super(context);
@@ -51,8 +51,8 @@ public class BottomCropImage extends ImageView {
             usedScaleFactor = Math.max(fitHorizontallyScaleFactor, fitVerticallyScaleFactor);
         }
 
-        float newImageWidth = originalImageWidth * usedScaleFactor;
-        float newImageHeight = originalImageHeight * usedScaleFactor;
+        //float newImageWidth = originalImageWidth * usedScaleFactor;
+        //float newImageHeight = originalImageHeight * usedScaleFactor;
 
         Matrix matrix = getImageMatrix();
         matrix.setScale(usedScaleFactor, usedScaleFactor, 0, 0); // Replaces the old matrix completly
