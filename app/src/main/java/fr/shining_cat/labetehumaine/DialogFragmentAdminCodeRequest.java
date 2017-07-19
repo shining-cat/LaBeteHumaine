@@ -26,8 +26,8 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
 
     // Container Activity must implement this interface
     public interface OnAdminCodeRequestListener {
-        public void onPasswordCorrect();
-        public void onPasswordDismiss();
+        void onPasswordCorrect();
+        void onPasswordDismiss();
     }
 
     public DialogFragmentAdminCodeRequest(){
@@ -73,7 +73,7 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
         super.onStart();
         final AlertDialog dialog = (AlertDialog)getDialog();
         if(dialog!=null){
-            Button positiveButton = (Button) dialog.getButton(Dialog.BUTTON_POSITIVE);
+            Button positiveButton = dialog.getButton(Dialog.BUTTON_POSITIVE);
             positiveButton.setOnClickListener(onPositiveClickListener);
         }
     }

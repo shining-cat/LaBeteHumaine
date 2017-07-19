@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity
                                 FragmentFullscreenImage.FragmentFullscreenImageListener,
                                 FragmentArtistGallery.ArtistGalleryListener{
 
-    public static Boolean DEBUG = false;
+    public static Boolean DEBUG = true;
 
     private final String TAG = "LOGGING::" + this.getClass().getSimpleName();
 
@@ -381,10 +381,13 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if(MainActivity.DEBUG) {
-            Log.i(TAG, "onOptionsItemSelected");
+            Log.i(TAG, "onOptionsItemSelected, id = " + id);
         }
         if (id == R.id.action_settings) {
             askForAdminCode();
+            return true;
+        } else if (id == R.id.open_form_button) {
+            openForm();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -419,7 +422,6 @@ public class MainActivity extends AppCompatActivity
         }
         openSettings();
     }
-
     private void openSettings() {
         if(MainActivity.DEBUG) {
             Log.i(TAG, "openSettings");
@@ -428,6 +430,12 @@ public class MainActivity extends AppCompatActivity
         startActivity(preferencesIntent);
     }
 
+    private void openForm(){
+        if(MainActivity.DEBUG) {
+            Log.i(TAG, "openForm");
+        }
+
+    }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
