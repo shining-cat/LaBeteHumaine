@@ -17,7 +17,6 @@
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -30,7 +29,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="fr.shining_cat.labetehumaine.MainActivity" />
         </activity>
-        <activity android:name=".FormActivity"></activity>
+        <activity
+            android:name=".FormActivity"
+            android:label="@string/action_form"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.shining_cat.labetehumaine.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
