@@ -48,11 +48,11 @@ public class FragmentSelectArtist extends Fragment {
         if(MainActivity.DEBUG) {
             Log.i(TAG, "onCreateView::forceFitArtistsCardsOnGalleryScreen = " + forceFitArtistsCardsOnGalleryScreen);
         }
-        int NumberOfArtists = beteHumaineDatas.getShop().size();
+        int numberOfArtists = beteHumaineDatas.getShop().size();
         if(firstInit) {
-            for (int artistIndex = 0; artistIndex < NumberOfArtists; artistIndex++) {
+            for (int artistIndex = 0; artistIndex < numberOfArtists; artistIndex++) {
                 FragmentTransaction fragmentTransaction = this.getChildFragmentManager().beginTransaction();
-                FragmentArtistCard fragmentArtistCard = FragmentArtistCard.newInstance(artistIndex, NumberOfArtists, forceFitArtistsCardsOnGalleryScreen);
+                FragmentArtistCard fragmentArtistCard = FragmentArtistCard.newInstance(artistIndex, numberOfArtists, forceFitArtistsCardsOnGalleryScreen);
                 //
                 fragmentTransaction.add(R.id.select_artist_cards_holder, fragmentArtistCard);
                 fragmentTransaction.commit();

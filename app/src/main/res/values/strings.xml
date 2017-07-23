@@ -123,4 +123,49 @@
     <string name="tattoos">Tattoos</string>
     <string name="drawings">Dessins</string>
 
+    <string name="please_notify_title">Merci d\'avertir votre tatoueur si l\'un des points suivants vous concerne</string>
+    <string name="please_notify_list">
+\t- Souffrez-vous de problèmes cardiaques ?\n
+\t- Avez-vous une hépatite ?\n
+\t- Souffrez-vous d\'épilepsie ?\n
+\t- Êtes-vous porteur du virus HIV ?\n
+\t- Êtes-vous au troisième trimestre d\'une grossesse ?\n
+\t- Êtes-vous sous l\'influence de drogue ou alcool ?\n
+\t- Êtes-vous allergique au latex ?\n
+\t- Prenez-vous des médicaments ?
+    </string>
+
+    <string name="legal_mention_title">Données personnelles</string>
+    <string name="legal_mention_text">
+\tLes informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé par La Bête Humaine pour
+la gestion d\'une base de donnée clientèle.\n
+\tElles sont conservées pendant 5 ans et sont destinées au gérant de l\'entreprise.\n
+\tConformément à la loi « informatique et libertés », vous pouvez exercer votre droit d\'accès aux données vous concernant
+et les faire rectifier en contactant : Pierre-Gilles Romieu - pgromieu@gmail.com.\n
+\tNous vous informons de l\’existence de la liste d\'opposition au démarchage téléphonique « Bloctel », sur laquelle
+vous pouvez vous inscrire sur le site officiel : bloctel.fr/</string>
+
+    <string name="understood_button_label">J\'ai compris</string>
+
+    <string name="prevalidation_warning_title">Attention</string>
+    <string name="prevalidation_warning_text_error">Tous les champs du formulaire doivent être remplis.</string>
+    <string name="prevalidation_warning_email_error">L\'adresse e-mail renseignée n\'est pas conforme.</string>
+    <string name="prevalidation_warning_text_major">En cliquant sur le bouton Valider ci-dessous, vous certifiez l\'exactitude des renseignements fournis. Vous certifiez être majeur en l\'ayant justifié par une pièce d\'identité, et ne faire l\'objet d\'aucune mesure de tutelle ou de curatelle, n\'avoir aucun problème physique, mental ou une condition médicale qui pourrait affecter directement ou indirectement votre choix d\'avoir un tatouage.\nVous consentez également à suivre toutes les instructions qui vous seront données par le tatoueur pour les premiers soins à accorder à votre tatouage.</string>
+    <string name="prevalidation_warning_text_underage">En cliquant sur le bouton Valider ci-dessous, vous certifiez l\'exactitude des renseignements fournis. Vous consentez également à suivre toutes les instructions qui vous seront données par le tatoueur pour les premiers soins à accorder à votre tatouage.\nVotre tuteur légal doit maintenant remplir la suite du formulaire.</string>
+    <string name="prevalidation_warning_text_underage_tutor">%1$s, %2$s, en cliquant sur le bouton Valider ci-dessous, vous certifiez avoir pris connaissance du présent contrat, et certifiez l\'exactitude des renseignements fournis. \nVous autorisez l\'artiste à tatouer %3$s %4$s, dont vous êtes le tuteur légal, et dégagez l\'artiste de toute responsabilité.</string>
+    <string name="formWhichArtist">Indiquez votre tatoueur</string>
+    <string name="formClientFirstname">Prénom</string>
+    <string name="formClientName">Nom</string>
+    <string name="formClientEmail">E-mail</string>
+    <string name="formClientPhone">N° de téléphone</string>
+    <string name="formClientZipcode">Code postal</string>
+    <string name="formClientBirthDate">Date de naissance</string>
+    <string name="formClientIDNumber">N° de carte d\'identité, pour les mineurs</string>
+    <string name="formParentFirstname">Prénom du tuteur légal</string>
+    <string name="formParentName">Nom du tuteur légal</string>
+    <string name="formParentIDNumber">N° de carte d\'identité du tuteur légal</string>
+    <string name="formValidateButton">Valider</string>
+    <string name="linkLegalMention"><u>Mentions légales...</u></string>
+
+
 </resources>
