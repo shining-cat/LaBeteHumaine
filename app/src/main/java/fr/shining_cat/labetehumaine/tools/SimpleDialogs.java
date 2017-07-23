@@ -1,6 +1,7 @@
 package fr.shining_cat.labetehumaine.tools;
 
 import android.content.Context;
+import android.support.annotation.StringDef;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -27,6 +28,14 @@ public class SimpleDialogs {
         builder.setMessage(message)
                 .setTitle(R.string.attention_title);
         builder.setNegativeButton(context.getString(R.string.confirm_button_label), null);
+        builder.create().show();
+    }
+
+    public static final void displayParamConfirmAlertDialog(Context context, String title, String message, String confirmButtonLabel){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(message)
+                .setTitle(title);
+        builder.setNegativeButton(confirmButtonLabel, null);
         builder.create().show();
     }
 

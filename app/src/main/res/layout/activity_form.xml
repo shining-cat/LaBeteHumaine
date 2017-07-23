@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="false"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+                <TextView
+                    android:id="@+id/labelFormWhichArtist"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formWhichArtist"
+                    android:textStyle="bold" />
+                <RadioGroup
+                    android:id="@+id/radioGroupFormWhichArtist"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormWhichArtist"
+                    android:inputType="textCapWords">
+                </RadioGroup>
+                <!-- <EditText
+                    android:id="@+id/editTextFormWhichArtist"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormWhichArtist"
+                    android:inputType="textCapWords"
+                    android:longClickable="false"
+                    android:textSize="10pt"/> -->
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/labelFormClientName"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientName"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientName"
+                    android:hint="@string/formClientName"
+                    android:inputType="textCapWords"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/labelFormClientFirstname"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientFirstname"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientFirstname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientFirstname"
+                    android:hint="@string/formClientFirstname"
+                    android:inputType="textCapWords"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/labelFormClientEmail"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientEmail"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientEmail"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientEmail"
+                    android:hint="@string/formClientEmail"
+                    android:inputType="textEmailAddress"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/labelFormClientPhone"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientPhone"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientPhone"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientPhone"
+                    android:hint="@string/formClientPhone"
+                    android:inputType="phone"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/labelFormClientZipcode"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientZipcode"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientZipcode"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientZipcode"
+                    android:hint="@string/formClientZipcode"
+                    android:inputType="number"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/labelFormClientBirthDate"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientBirthDate"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientBirthDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientBirthDate"
+                    android:hint="@string/formClientBirthDate"
+                    android:inputType="date"
+                    android:longClickable="false"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutFormClientIDNumberLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/labelFormClientIDNumber"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientIDNumber"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientIDNumber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientIDNumber"
+                    android:hint="@string/formClientIDNumber"
+                    android:inputType="number"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+            <!--parent infos-->
+            <RelativeLayout
+                android:id="@+id/layoutFormParentNameLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/labelFormParentName"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formParentName"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormParentName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormParentName"
+                    android:hint="@string/formParentName"
+                    android:inputType="textCapWords"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutFormParentFirstnameLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/labelFormParentFirstname"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formParentFirstname"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormParentFirstname"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormParentFirstname"
+                    android:hint="@string/formParentFirstname"
+                    android:inputType="textCapWords"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutFormParentIDNumberLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/labelFormParentIDNumber"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formParentIDNumber"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormParentIDNumber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormParentIDNumber"
+                    android:hint="@string/formParentIDNumber"
+                    android:inputType="number"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:layout_marginTop="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:id="@+id/linkLegalMentions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/linkLegalMention"
+                    android:textStyle="bold"
+                    android:layout_alignBaseline="@+id/formValidateButton"
+                    android:layout_alignBottom="@+id/formValidateButton"
+                    android:layout_alignParentStart="true" />
+                <Button
+                    android:id="@+id/formValidateButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/formValidateButton"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:layout_alignParentEnd="true"/>
+            </RelativeLayout>
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>

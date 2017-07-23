@@ -30,6 +30,15 @@ import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
 /**
  * Created by Shiva on 08/06/2016.
  */
+
+/*TODO
+gestion des données enregistrées par le formulaire :
+bouton paramétrage des adresses pour confirmation formulaire bien rempli (y'a-t-il une adresse pour le shop que tous peuvent checker?)
+bouton paramétrage des adresses pour réception du fichier
+bouton envoi du fichier courant par mail
+bouton ouvir une liste des fichiers existants avec pour chacun un bouton pour essayer de renvoyer ce fichier et un bouton pour l'effacer, avec confirmation
+ */
+
 public class SettingsActivity extends AppCompatActivity
             implements  DialogFragmentAdminCodeRequest.OnAdminCodeRequestListener,
                         DialogFragmentNewPassword.OnNewPasswordListener,
@@ -89,7 +98,7 @@ public class SettingsActivity extends AppCompatActivity
         //
         String rest_screen = savedSettings.getString(getString(R.string.resting_screen_pref_key), MainActivity.REST_TO_WAITING_SCREEN);
         ToggleButton restScreenToggleButton = (ToggleButton) findViewById(R.id.rest_screen_choice_toggle_button);
-        restScreenToggleButton.setChecked((rest_screen.equals(MainActivity.REST_TO_WAITING_SCREEN)) ? true : false);
+        restScreenToggleButton.setChecked((rest_screen.equals(MainActivity.REST_TO_WAITING_SCREEN)));
         restScreenToggleButton.setOnClickListener(restScreenClicButtonlistener);
         //
         updateWelcomeText("");
@@ -115,7 +124,7 @@ public class SettingsActivity extends AppCompatActivity
         //
         String current_mode = savedSettings.getString(getString(R.string.current_mode_pref_key), MainActivity.STANDARD_MODE);
         ToggleButton adminCodeToggleButton = (ToggleButton) findViewById(R.id.admin_code_toggle_button);
-        adminCodeToggleButton.setChecked((current_mode.equals(MainActivity.KIOSK_MODE)) ? true : false);
+        adminCodeToggleButton.setChecked((current_mode.equals(MainActivity.KIOSK_MODE)));
         adminCodeToggleButton.setOnClickListener(adminCodeClicButtonlistener);
 
     }

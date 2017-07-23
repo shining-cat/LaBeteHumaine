@@ -10,7 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MyAppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -23,11 +23,20 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/action_settings"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.shining_cat.labetehumaine.MainActivity"/>
+                android:value="fr.shining_cat.labetehumaine.MainActivity" />
+        </activity>
+        <activity
+            android:name=".FormActivity"
+            android:label="@string/action_form"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="fr.shining_cat.labetehumaine.MainActivity" />
         </activity>
     </application>
 

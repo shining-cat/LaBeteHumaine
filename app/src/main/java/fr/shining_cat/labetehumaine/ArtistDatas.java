@@ -33,6 +33,9 @@ public class ArtistDatas {
 
     public void setName(String name) {
         this.name = name;
+        /*TODO : add capability to change this string by capitalizing every firdst letter of every name,
+        to prevent having smth like pierre-gilles Romieu
+         */
         artistLocalRootFolderName = BeteHumaineDatas.PICTURES_LOCAL_ROOT_FOLDER + File.separator + name.replaceAll("[^A-Za-z0-9]", "");
         tattoosLocalFolderPath = artistLocalRootFolderName + File.separator + "tattoos";
         drawingsLocalFolderPath = artistLocalRootFolderName + File.separator + "drawings";

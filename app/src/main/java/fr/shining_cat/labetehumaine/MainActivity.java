@@ -434,7 +434,8 @@ public class MainActivity extends AppCompatActivity
         if(MainActivity.DEBUG) {
             Log.i(TAG, "openForm");
         }
-
+        Intent formIntent = new Intent(this, FormActivity.class);
+        startActivity(formIntent);
     }
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
