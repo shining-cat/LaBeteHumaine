@@ -7,6 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import fr.shining_cat.labetehumaine.BuildConfig;
 import fr.shining_cat.labetehumaine.MainActivity;
 
 /**
@@ -44,14 +45,14 @@ public class LocalFolderParser {
                 }
             } else {
                 // image directory is empty
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "Image directory is empty");
                 }
                 return null;
             }
         } else {
             //path is not a directory
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "Path is not a directory");
             }
             return null;

@@ -24,6 +24,7 @@ import java.util.Iterator;
 
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
 import fr.shining_cat.labetehumaine.tools.DownloadImages;
+import fr.shining_cat.labetehumaine.tools.LocalXMLParser;
 import fr.shining_cat.labetehumaine.tools.SaveRemoteXMLtoLocalFile;
 import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
 
@@ -31,12 +32,8 @@ import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
  * Created by Shiva on 08/06/2016.
  */
 
-/*TODO
-gestion des données enregistrées par le formulaire :
-bouton paramétrage des adresses pour confirmation formulaire bien rempli (y'a-t-il une adresse pour le shop que tous peuvent checker?)
-bouton paramétrage des adresses pour réception du fichier
-bouton envoi du fichier courant par mail
-bouton ouvir une liste des fichiers existants avec pour chacun un bouton pour essayer de renvoyer ce fichier et un bouton pour l'effacer, avec confirmation
+/*TODO ajout d'un bouton pour exporter les données collectées, au clic, génération du nouveau fichier par ClientDatas, retourne path ou fail, au retour path, supprimer fichier interne (tjs ClientDatas) et lancer intent fileExplorer pour localiser le fichier qui sera partagé par mail.
+
  */
 
 public class SettingsActivity extends AppCompatActivity
@@ -60,7 +57,7 @@ public class SettingsActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreate");
         }
         super.onCreate(savedInstanceState);
@@ -73,10 +70,10 @@ public class SettingsActivity extends AppCompatActivity
     @Override
     public void onStart() {
         super.onStart();
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onStart");
         }
-        beteHumaineDatas = BeteHumaineDatas.getInstance(SettingsActivity.this);
+        beteHumaineDatas = BeteHumaineDatas.getInstance();
         //retrieve the SharedPreferences
         savedSettings = getSharedPreferences(MainActivity.SETTINGS_FILE_NAME, MODE_PRIVATE);
         //initialization of all the components
@@ -111,7 +108,7 @@ public class SettingsActivity extends AppCompatActivity
         displayWelcomeTextOnGalleryToggleButton.setOnClickListener(displayWelcomeTextOnGalleryClicButtonlistener);
         //
         Boolean forceFitArtistsCardsOnGalleryScreen = savedSettings.getBoolean(getString(R.string.force_fit_artists_cards_to_gallery_screen_pref_key), false);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onStart::forceFitArtistsCardsOnGalleryScreen = " + forceFitArtistsCardsOnGalleryScreen);
         }
         ToggleButton forceFitArtistsCardsOnGalleryScreenToggleButton = (ToggleButton) findViewById(R.id.force_fit_gallery_toggle_button);
@@ -129,10 +126,10 @@ public class SettingsActivity extends AppCompatActivity
 
     }
 
-    private OnClickListener xmlFileAddressEditButtonListener = new View.OnClickListener() {
+    private OnClickListener xmlFileAddressEditButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "xmlFileAddressEditButtonListener::onClick");
             }
             String currentXMLFileAddress = savedSettings.getString(
@@ -143,10 +140,10 @@ public class SettingsActivity extends AppCompatActivity
             dialogFragmentXMLFileAddressEdit.show(fm, "dialog_fragment_xml_file_address_edit");
         }
     };
-    private OnClickListener welcomeTextEditButtonListener = new View.OnClickListener() {
+    private OnClickListener welcomeTextEditButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "welcomeTextEditButtonListener::onClick");
             }
             String currentWelcomeText = savedSettings.getString(
@@ -158,16 +155,16 @@ public class SettingsActivity extends AppCompatActivity
         }
     };
 
-    private OnClickListener downloadXMLFileButtonListener = new View.OnClickListener() {
+    private OnClickListener downloadXMLFileButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadXMLFileButtonListener::onClick");
             }
             //launch XML Download :
             String xmlFileAddress = savedSettings.getString(
                     getString(R.string.xml_file_address_pref_key), getString(R.string.xml_file_address_text_default));
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "launchXMLDownload::xmlFileAddress = " + xmlFileAddress);
             }
             URL xmlFileURL;
@@ -185,7 +182,7 @@ public class SettingsActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             } else {
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "launchXMLDownload:: no internet connection");
                 }
                 SimpleDialogs.displayErrorAlertDialog(SettingsActivity.this, getString(R.string.error_no_internet_access));
@@ -198,17 +195,17 @@ public class SettingsActivity extends AppCompatActivity
     public void onSaveRemoteXMLtoLocalFileComplete(Long aDate){
         //SaveRemoteXMLtoLocalFile notifies us that xml download is complete, along with the resulting dl date
         updateLastDlXML(aDate);
-        beteHumaineDatas.goGrabLocalDatasNow();
+        parseLocalXML();
     }
 
     private OnClickListener downloadDatasButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadDatasButtonListener::onClick");
             }
-            if(beteHumaineDatas.goGrabLocalDatasNow()){
-                if(MainActivity.DEBUG) {
+            if(parseLocalXML()){
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "downloadDatasButtonListener::onClick : content of shop : \n" + beteHumaineDatas.toString());
                 }
                 //checking if internet connection is available
@@ -220,7 +217,7 @@ public class SettingsActivity extends AppCompatActivity
                     //download pictures and store them
                     downloadPictures();
                 } else{
-                    if(MainActivity.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         Log.i(TAG, "downloadDatasButtonListener:: no internet connection");
                     }
                     SimpleDialogs.displayErrorAlertDialog(SettingsActivity.this, getString(R.string.error_no_internet_access));
@@ -232,15 +229,24 @@ public class SettingsActivity extends AppCompatActivity
     };
 
     private void downloadPictures(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "downloadPictures");
         }
         //download pictures and create folders to store them
-        shopIterator = beteHumaineDatas.getShop().iterator();
+        if(!beteHumaineDatas.hasDatasReady()){
+            parseLocalXML();
+        }
+        ArrayList<ArtistDatas> shop = beteHumaineDatas.getShop();
+
+        shopIterator = shop.iterator();
         downloadNextArtistPictures();
     }
+    private boolean parseLocalXML(){
+        LocalXMLParser localXMLParser = new LocalXMLParser();
+        return localXMLParser.parseXMLdatas(this);
+    }
     public void onDownloadImagesError(String errorURL){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onDownloadImagesError " + errorURL );
         }
         currentlyLoadingCategory = "";
@@ -250,7 +256,7 @@ public class SettingsActivity extends AppCompatActivity
                                         "\n\n\t " + errorURL);
     }
     public void onSaveImagesError(String fileName, String errorMessage){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onSaveImagesError");
         }
         currentlyLoadingCategory = "";
@@ -265,11 +271,11 @@ public class SettingsActivity extends AppCompatActivity
     private void downloadNextArtistPictures(){
         //loading order is FACE -> TATTOOS -> DRAWINGS (current state stored in currentlyLoadingCategory)
         DownloadImages downloader = new DownloadImages(this);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "downloadNextArtistPictures :: currentlyLoadingCategory = " + currentlyLoadingCategory);
         }
         if(currentlyLoadingCategory.equals(FACE)){//we have just loaded a face picture => launching tattoos folder loading
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadNextArtistPictures :: same ARTIST..tattoos");
             }
             currentlyLoadingCategory = TATTOOS;
@@ -278,7 +284,7 @@ public class SettingsActivity extends AppCompatActivity
                     getString(R.string.pictures_loading_title, getString(R.string.tattoos), currentArtistLoading.getName()),
                     currentArtistLoading.getTattoosLocalFolderPath());
         }else if(currentlyLoadingCategory.equals(TATTOOS)){//we have just loaded a tattoos folder => launching drawings folder loading
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadNextArtistPictures :: same ARTIST..drawings");
             }
             currentlyLoadingCategory = DRAWINGS;
@@ -288,7 +294,7 @@ public class SettingsActivity extends AppCompatActivity
                     currentArtistLoading.getDrawingsLocalFolderPath());
         }else { //we have just loaded a drawings folder, OR it's the first ARTIST => launching tattoos folder loading
             if (shopIterator.hasNext()){//if we have one more artist
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "downloadNextArtistPictures :: NEXT ARTIST..profile picture");
                 }
                 currentlyLoadingCategory = FACE;
@@ -301,7 +307,7 @@ public class SettingsActivity extends AppCompatActivity
                         getString(R.string.profile_picture_loading_title, currentArtistLoading.getName()),
                         currentArtistLoading.getArtistLocalRootFolderName());
             } else{
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "downloadNextArtistPictures :: QUEUE END");
                 }
                 currentlyLoadingCategory = "";
@@ -316,7 +322,7 @@ public class SettingsActivity extends AppCompatActivity
 
     private void eraseExistingPictures(){ //will recursively erase all datas stored in /data/data/fr.shining_cat.labetehumaine/files/bete_humaine_pics/
         String pathToFolder = this.getFilesDir() + File.separator + BeteHumaineDatas.PICTURES_LOCAL_ROOT_FOLDER;
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "eraseExistingPictures trying : " + pathToFolder);
         }
         File localPicsToDelete = new File(pathToFolder);
@@ -332,10 +338,10 @@ public class SettingsActivity extends AppCompatActivity
         fileOrDirectory.delete();
     }
 
-    private OnClickListener waitingDelayEditButtonListener = new View.OnClickListener() {
+    private OnClickListener waitingDelayEditButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "waitingDelayEditButtonListener::onClick");
             }
             int currentWaitingDelay = savedSettings.getInt(getString(R.string.waiting_delay_pref_key), MainActivity.INITIAL_WAITING_DELAY);
@@ -345,10 +351,10 @@ public class SettingsActivity extends AppCompatActivity
             dialogFragmentWaitingDelayEdit.show(fm, "dialog_fragment_waiting_delay_edit");
         }
     };
-    private OnClickListener numberOfColumnsEditButtonListener = new View.OnClickListener() {
+    private OnClickListener numberOfColumnsEditButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "numberOfColumnsEditButtonListener::onClick");
             }
             int currentNumberOfColumns = savedSettings.getInt(getString(R.string.number_of_columns_pref_key), FragmentArtistGallery.DEFAULT_NUM_OF_COLUMNS);
@@ -361,7 +367,7 @@ public class SettingsActivity extends AppCompatActivity
 
     public void updateXMLFileAddress(String newXMLFileAddress) {
         // DialogFragmentXMLFileAddressEdit notifies us that a new value has been entered for waiting delay
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateXMLFileAddress::newXMLFileAddress = " + newXMLFileAddress);
         }
         TextView xmlFileAddressText = (TextView) findViewById(R.id.xml_file_address_editText);
@@ -423,7 +429,7 @@ public class SettingsActivity extends AppCompatActivity
     }
     public void updateWaitingDelay(int newWaitingDelay) {
         // DialogFragmentWaitingDelayEdit notifies us that a new value has been entered for waiting delay
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateWaitingDelay::newWaitingDelay = " + newWaitingDelay);
         }
         TextView waitingDelayText = (TextView) findViewById(R.id.waiting_screen_delay_textfield);
@@ -443,7 +449,7 @@ public class SettingsActivity extends AppCompatActivity
     }
     public void updateNumberOfColumns(int newNumberOfColumns) {
         // DialogFragmentNumberOfColumnsEdit notifies us that a new value has been entered
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateNumberOfColumns::newNumberOfColumns = " + newNumberOfColumns);
         }
         TextView numberOfColumnsText = (TextView) findViewById(R.id.number_of_columns_value);
@@ -461,10 +467,10 @@ public class SettingsActivity extends AppCompatActivity
             numberOfColumnsText.setText(getString(R.string.number_of_column_value, numbOfCol));
         }
     }
-    private OnClickListener restScreenClicButtonlistener = new View.OnClickListener() {
+    private OnClickListener restScreenClicButtonlistener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "restScreenClicButtonlistener::onClick");
             }
             ToggleButton restScreenToggle = (ToggleButton) v;
@@ -477,10 +483,10 @@ public class SettingsActivity extends AppCompatActivity
             editor.apply();
         }
     };
-    private OnClickListener displayWelcomeTextOnGalleryClicButtonlistener = new View.OnClickListener() {
+    private OnClickListener displayWelcomeTextOnGalleryClicButtonlistener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "displayWelcomeTextOnGalleryClicButtonlistener::onClick");
             }
             ToggleButton displayWelcomeTextOnGalleryToggle = (ToggleButton) v;
@@ -493,22 +499,22 @@ public class SettingsActivity extends AppCompatActivity
             editor.apply();
         }
     };
-    private OnClickListener forceFitArtistsCardsOnGalleryScreenClicButtonlistener = new View.OnClickListener() {
+    private OnClickListener forceFitArtistsCardsOnGalleryScreenClicButtonlistener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "forceFitArtistsCardsOnGalleryScreenClicButtonlistener::onClick");
             }
             ToggleButton forceFitArtistsCardsOnGalleryScreenToggle = (ToggleButton) v;
             SharedPreferences.Editor editor = savedSettings.edit();
             if (forceFitArtistsCardsOnGalleryScreenToggle.isChecked()) {
                 editor.putBoolean(getString(R.string.force_fit_artists_cards_to_gallery_screen_pref_key), true);
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "forceFitArtistsCardsOnGalleryScreenClicButtonlistener::onClick__ON");
                 }
             } else {
                 editor.putBoolean(getString(R.string.force_fit_artists_cards_to_gallery_screen_pref_key), false);
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "forceFitArtistsCardsOnGalleryScreenClicButtonlistener::onClick__OFF");
                 }
             }
@@ -517,7 +523,7 @@ public class SettingsActivity extends AppCompatActivity
     };
     public void updateWelcomeText(String newWelcomeText) {
         // DialogFragmentXMLFileAddressEdit notifies us that a new value has been entered for waiting delay
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateWelcomeText::newWelcomeText = " + newWelcomeText);
         }
         TextView welcomeTextTextfield = (TextView) findViewById(R.id.custom_welcome_text_editText);
@@ -536,10 +542,10 @@ public class SettingsActivity extends AppCompatActivity
         }
     }
 
-    private OnClickListener adminCodeClicButtonlistener = new View.OnClickListener() {
+    private OnClickListener adminCodeClicButtonlistener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "adminCodeClicButtonlistener::onClick");
             }
             ToggleButton adminToggle = (ToggleButton) v;
@@ -561,7 +567,7 @@ public class SettingsActivity extends AppCompatActivity
     };
 
     public void onNewPasswordDismiss() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onNewPasswordDismiss");
         }
         ToggleButton adminCodeToggleButton = (ToggleButton) findViewById(R.id.admin_code_toggle_button);
@@ -569,7 +575,7 @@ public class SettingsActivity extends AppCompatActivity
     }
 
     public void onNewPasswordFirstEntry(String password) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onNewPasswordFirstEntry::password = " + password);
         }
         FragmentManager fm = getSupportFragmentManager();
@@ -580,7 +586,7 @@ public class SettingsActivity extends AppCompatActivity
 
 
     public void onNewPasswordSecondEntryCorrect(String password) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onNewPasswordSecondEntryCorrect::password = " + password);
         }
         SharedPreferences.Editor editor = savedSettings.edit();
@@ -595,7 +601,7 @@ public class SettingsActivity extends AppCompatActivity
 
 
     public void onPasswordDismiss() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onPasswordDismiss");
         }
         ToggleButton adminCodeToggleButton = (ToggleButton) findViewById(R.id.admin_code_toggle_button);
@@ -605,7 +611,7 @@ public class SettingsActivity extends AppCompatActivity
 
     public void onPasswordCorrect() {
         // DialogFragmentAdminCodeRequest notifies us that the user has entered a correct password => proceed to change mode to standard
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onPasswordCorrect");
         }
         SharedPreferences.Editor editor = savedSettings.edit();

@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 
 import java.io.File;
 
+import fr.shining_cat.labetehumaine.BuildConfig;
 import fr.shining_cat.labetehumaine.MainActivity;
 import fr.shining_cat.labetehumaine.R;
 
@@ -52,7 +53,7 @@ public class ThumbnailAdapter extends BaseAdapter {
     @Override
     // create a new ImageView for each item referenced by the Adapter
     public View getView(int position, View convertView, ViewGroup parent) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "getView");
         }
         ImageView imageView;

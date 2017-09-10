@@ -46,7 +46,7 @@ public class FragmentFullscreenImage extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView");
         }
         super.onCreateView(inflater, container, savedInstanceState);
@@ -78,7 +78,7 @@ public class FragmentFullscreenImage extends Fragment{
 
     @Override
     public void onAttach(Context context) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onAttach");
         }
         super.onAttach(context);
@@ -89,7 +89,7 @@ public class FragmentFullscreenImage extends Fragment{
     // remove ArtistGalleryListener when Fragment detached
     @Override
     public void onDetach() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onDetach");
         }
         super.onDetach();

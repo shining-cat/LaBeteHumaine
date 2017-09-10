@@ -34,7 +34,7 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "CONSTRUCTOR - EMPTY");
         }
     }
@@ -50,7 +50,7 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateDialog");
         }
         correctPass = getArguments().getString("correctPass");
@@ -67,7 +67,7 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
     //piggyback onStart to implement custom behavior on positive button (with controlled dismissal)
     @Override
     public void onStart(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onStart");
         }
         super.onStart();
@@ -95,12 +95,12 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
     private View.OnClickListener onPositiveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onPositiveClickListener");
             }
             if(checkPassword(codeRequest.getText().toString())){
                 //password correct => close dialog, MainActivity will handle the rest
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - password correct");
                 }
                 mCallback.onPasswordCorrect();
@@ -111,7 +111,7 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
                 message.setGravity(Gravity.CENTER, message.getXOffset()/2, message.getYOffset()/2);
                 message.show();
                 codeRequest.setText("");
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - password incorrect");
                 }
             }
@@ -120,7 +120,7 @@ public class DialogFragmentAdminCodeRequest extends DialogFragment {
 
     private DialogInterface.OnClickListener onNegativeClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onNegativeClickListener");
             }
             //"cancel" => notify activity, then close the dialog

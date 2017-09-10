@@ -25,8 +25,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
+import fr.shining_cat.labetehumaine.tools.LocalXMLParser;
 import fr.shining_cat.labetehumaine.tools.ScreenSize;
 import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
 
@@ -39,7 +41,6 @@ public class MainActivity extends AppCompatActivity
                                 FragmentFullscreenImage.FragmentFullscreenImageListener,
                                 FragmentArtistGallery.ArtistGalleryListener{
 
-    public static Boolean DEBUG = true;
 
     private final String TAG = "LOGGING::" + this.getClass().getSimpleName();
 
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreate");
         }
         super.onCreate(savedInstanceState);
@@ -98,14 +99,14 @@ public class MainActivity extends AppCompatActivity
         idleDelay = savedSettings.getInt(getString(R.string.waiting_delay_pref_key), INITIAL_WAITING_DELAY);
         Long lastDlXML = savedSettings.getLong(getString(R.string.xml_file_last_download_pref_key), 0);
         Long lastDldatas = savedSettings.getLong(getString(R.string.datas_last_download_pref_key), 0);
-        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance(this);
+        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance();
         if(lastDlXML==0 || lastDldatas==0){
             SimpleDialogs.displayErrorAlertDialog(this, getString(R.string.error_never_downloaded));
         } else if(lastDlXML > lastDldatas) {
             SimpleDialogs.displayErrorAlertDialog(this, getString(R.string.error_pictures_older_than_xml));
-        } else{
-            //grab local datas if existant
-            beteHumaineDatas.goGrabLocalDatasNow();
+        } else if(!beteHumaineDatas.hasDatasReady()){
+            //grab local datas if existant, the parser will store them into BeteHumaineDatas
+            parseLocalXML();
         }
         //setting needed decorView for fullscreen behavior
         decorView = getWindow().getDecorView();
@@ -115,11 +116,14 @@ public class MainActivity extends AppCompatActivity
         //Handle when activity is recreated like on orientation Change
         shouldDisplayHomeUp();
     }
-
+    private boolean parseLocalXML(){
+        LocalXMLParser localXMLParser = new LocalXMLParser();
+        return localXMLParser.parseXMLdatas(this);
+    }
     private View.OnClickListener onActionBarTitleClicked = new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onActionBarTitleClicked");
             }
             getSupportFragmentManager().popBackStack();
@@ -131,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         Point realScreenSize = ScreenSize.getRealScreenSize(this);
         int screenWidth = realScreenSize.x;
         int screenHeight = realScreenSize.y;
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "setBackgroundDecor::SCREEN SIZE : width = " + screenWidth + " X height = " + screenHeight);
         }
         //get reference to display elements
@@ -155,7 +159,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onStart(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onStart");
         }
         super.onStart();
@@ -165,7 +169,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackStackChanged() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onBackStackChanged");
         }
         shouldDisplayHomeUp();
@@ -174,13 +178,13 @@ public class MainActivity extends AppCompatActivity
     public void shouldDisplayHomeUp(){
         //Enable Up button only  if there are entries in the back stack
         boolean canBack = getSupportFragmentManager().getBackStackEntryCount()>0;
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "shouldDisplayHomeUp::canBack = " + canBack);
         }
         getSupportActionBar().setDisplayHomeAsUpEnabled(canBack);
     }
     public void shouldDisplayLogo(Boolean shouldI){ //called by the fragments
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "shouldDisplayLogo::shouldI = " + shouldI);
         }
         if (shouldI) {
@@ -198,14 +202,14 @@ public class MainActivity extends AppCompatActivity
         logoImageView.setVisibility(View.GONE);
     }
     public void updateActionBarTitle(String title){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateActionBarTitle::title = " + title);
         }
         getSupportActionBar().setTitle(title);
     }
     @Override
     public boolean onSupportNavigateUp() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onSupportNavigateUp");
         }
         //This method is called when the up button is pressed. Just the pop back stack.
@@ -213,7 +217,7 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
     private void showWaitingScreen(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "showWaitingScreen");
             Log.i(TAG, "handleMessage::currentShownFragment = " + currentShownFragment);
         }
@@ -240,7 +244,7 @@ public class MainActivity extends AppCompatActivity
     @Override
         public void onWaitingScreenClicked() {
         //TODO : rattacher et détacher le listener pour un fonctionnement sans le fragment waitingscreen
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onWaitingScreenClicked");
         }
         Long lastDlXML = savedSettings.getLong(getString(R.string.xml_file_last_download_pref_key), 0);
@@ -254,7 +258,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
     private void displayWelcomeText(String welcomeTextStyle){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "displayWelcomeText::welcomeTextStyle = " + welcomeTextStyle);
         }
         RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams) welcomeTextView.getLayoutParams();
@@ -276,7 +280,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void hideWelcomeText(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "hideWelcomeText");
         }
         if(animBlink!=null){
@@ -286,7 +290,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void showSelectArtistScreen(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "showSelectArtistScreen");
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -301,7 +305,7 @@ public class MainActivity extends AppCompatActivity
         //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         Boolean shallShowWelcomeText = savedSettings.getBoolean(getString(R.string.show_welcome_text_on_gallery_pref_key), false);//checking user setting for display welcome text on select artist page
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "showSelectArtistScreen::shallShowWelcomeText = " + shallShowWelcomeText);
         }
         if(shallShowWelcomeText){
@@ -312,13 +316,18 @@ public class MainActivity extends AppCompatActivity
     }
     @Override
     public void onArtistCardClicked(int artistIndex, String whatWasClicked) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onArtistCardToGallery::artistIndex = " + artistIndex + " // whatWasClicked = " + whatWasClicked);
         }
         artistCurrentlyDisplayed = artistIndex;
         whatIsCurrentlyDisplayed = whatWasClicked;
-        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance(this);
-        ArtistDatas artistSelected = beteHumaineDatas.getShop().get(artistIndex);
+        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance();
+        if(!beteHumaineDatas.hasDatasReady()){
+            parseLocalXML();
+        }
+        ArrayList<ArtistDatas> shop = beteHumaineDatas.getShop();
+
+        ArtistDatas artistSelected = shop.get(artistIndex);
         if(whatWasClicked.equals(FragmentArtistCard.TATTOOS_WAS_CLICKED)) {
             showGallery(artistSelected.getTattoosLocalFolderPath(), artistSelected.getName());
         } else{
@@ -327,7 +336,7 @@ public class MainActivity extends AppCompatActivity
         hideWelcomeText();
     }
     private void showGallery(String imageFolder, String artistName){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "showGallery");
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -340,11 +349,16 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onArtistGalleryClicked(int position) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onArtistGalleryClicked position = " + position);
         }
-        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance(this);
-        ArtistDatas artistSelected = beteHumaineDatas.getShop().get(artistCurrentlyDisplayed);
+        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance();
+        if(!beteHumaineDatas.hasDatasReady()){
+            parseLocalXML();
+        }
+        ArrayList<ArtistDatas> shop = beteHumaineDatas.getShop();
+
+        ArtistDatas artistSelected = shop.get(artistCurrentlyDisplayed);
         String imagesFolder;
         String artistName = artistSelected.getName();
         if(whatIsCurrentlyDisplayed.equals(FragmentArtistCard.TATTOOS_WAS_CLICKED)) {
@@ -355,7 +369,7 @@ public class MainActivity extends AppCompatActivity
         showFullScreenImage(position, imagesFolder, artistName);
     }
     private void showFullScreenImage(int position, String imagesFolder, String artistName){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onArtistGalleryClicked position = " + position);
         }
 
@@ -369,7 +383,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateOptionsMenu");
         }
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -380,7 +394,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onOptionsItemSelected, id = " + id);
         }
         if (id == R.id.action_settings) {
@@ -396,7 +410,7 @@ public class MainActivity extends AppCompatActivity
     private void askForAdminCode() {
         //get current mode, if set, or standard if not set
         String current_mode = savedSettings.getString(getString(R.string.current_mode_pref_key), STANDARD_MODE);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "askForAdminCode::current_mode = " + current_mode);
         }
         //open a dialog invite to ask for admin code, if one is present in Preferences = if we are in KIOSK_MODE
@@ -411,19 +425,19 @@ public class MainActivity extends AppCompatActivity
         }
     }
     public void onPasswordDismiss() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "AdminCode Dialog : dismiss");
         }
     }
     public void onPasswordCorrect() {
         // DialogFragmentAdminCodeRequest notifies us that the user has entered a correct password => proceed to open settings
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "AdminCode Dialog : Password correct!");
         }
         openSettings();
     }
     private void openSettings() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "openSettings");
         }
         Intent preferencesIntent = new Intent(this, SettingsActivity.class);
@@ -431,7 +445,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void openForm(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "openForm");
         }
         Intent formIntent = new Intent(this, FormActivity.class);
@@ -440,7 +454,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onWindowFocusChanged::hasFocus = " + hasFocus);
         }
         if (hasFocus) {// When the window gains focus, hide the system UI.
@@ -457,7 +471,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onUserInteraction(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onUserInteraction");
         }
         //reset idle timer
@@ -473,7 +487,7 @@ public class MainActivity extends AppCompatActivity
     private final Handler mIdleHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "handleMessage::currentShownFragment = " + currentShownFragment);
             }
             if(currentShownFragment!=null) {
@@ -493,7 +507,7 @@ public class MainActivity extends AppCompatActivity
             manager.popBackStackImmediate(first.getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
         String rest_screen = savedSettings.getString(getString(R.string.resting_screen_pref_key), MainActivity.REST_TO_WAITING_SCREEN);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "goToRestingScreen :: " + rest_screen);
         }
         if(rest_screen.equals(REST_TO_WAITING_SCREEN)) {
@@ -504,7 +518,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void delayedHideSystemUI(int delayMillis) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "delayedHideSystemUI");
         }
         mHideSytemUIHandler.removeMessages(0);
@@ -517,7 +531,7 @@ public class MainActivity extends AppCompatActivity
         }
     };
     private void hideSystemUI() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "hideSystemUI");
         }
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
@@ -531,7 +545,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     protected void showSystemUI() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "showSystemUI");
         }
         int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
@@ -540,7 +554,7 @@ public class MainActivity extends AppCompatActivity
         decorView.setSystemUiVisibility(uiOptions);
     }
     private void delayedHideActionBar() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "delayedHideActionBar");
         }
         mHideActionBarHandler.removeMessages(0);
@@ -553,13 +567,13 @@ public class MainActivity extends AppCompatActivity
         }
     };
     private void hideActionBar(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "hideActionBar");
         }
         toolbarHolder.animate().translationY(ACTIONBAR_Y_HIDDEN).alpha(0);
     }
     private void showActionBar(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "showActionBar");
         }
         toolbarHolder.animate().translationY(ACTIONBAR_Y_SHOWN).alpha(1);
@@ -570,7 +584,7 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onSystemUiVisibilityChange(int visibility) {
                     if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                        if(MainActivity.DEBUG) {
+                        if (BuildConfig.DEBUG) {
                             Log.i(TAG, "onSystemUiVisibilityChange :: The system bars are visible");
                         }
                         // The system bars are visible
@@ -579,7 +593,7 @@ public class MainActivity extends AppCompatActivity
                         showActionBar();
                         delayedHideActionBar();
                     } else {
-                        if(MainActivity.DEBUG) {
+                        if (BuildConfig.DEBUG) {
                             Log.i(TAG, "onSystemUiVisibilityChange :: The system bars are NOT visible");
                         }
                         // The system bars are NOT visible
@@ -601,7 +615,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
     public void updateCurrentFragmentShownVariable(Fragment fragment){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateCurrentFragmentShownVariable::currentShownFragment = " + fragment.getClass().getSimpleName());
         }
         currentShownFragment = fragment;
