@@ -32,9 +32,8 @@ import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
  * Created by Shiva on 08/06/2016.
  */
 
-/*TODO ajout d'un bouton pour exporter les données collectées, au clic, génération du nouveau fichier par ClientDatas, retourne path ou fail, au retour path, supprimer fichier interne (tjs ClientDatas) et lancer intent fileExplorer pour localiser le fichier qui sera partagé par mail.
-
- */
+//TODO ajout d'un bouton pour exporter les données collectées, au clic, génération du nouveau fichier par ClientDatas, retourne path ou fail, au retour path, supprimer fichier interne (tjs ClientDatas) et lancer intent fileExplorer pour localiser le fichier qui sera partagé par mail.
+//TODO : ajouter un switch pour activer/désactiver le formulaire client
 
 public class SettingsActivity extends AppCompatActivity
             implements  DialogFragmentAdminCodeRequest.OnAdminCodeRequestListener,
