@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">La Bete Humaine</string>
-    <string name="app_version">Version 1.2</string>
+    <string name="app_version">Version 2.1</string>
     <string name="app_description">Tattoo shop book display</string>
     <string name="app_made_by">Création et réalisation :</string>
     <string name="app_made_name">Shiva Bernhard</string>
@@ -51,7 +51,6 @@
     <string name="error_xml_file_parsing">Fichier XML non lisible.</string>
     <string name="error_writing_picture_to_disk_generik">Erreur générique d\'écriture.</string>
     <string name="error_writing_picture_to_disk_double">Le fichier existe déjà : supprimer les doublons.</string>
-
     <string name="error_pictures_older_than_xml">Les images n\'ont pas été mises à jour depuis le dernier téléchargement du fichier XML.</string>
     <string name="error_loading_picture">Une erreur est survenue lors du chargement de l\'image.</string>
     <string name="error_reading_pictures">Une erreur est survenue lors de la lecture des images.</string>
@@ -75,7 +74,7 @@
     <string name="pictures_loading_title">Téléchargement des %1$s pour %2$s...</string>
     <string name="pictures_loading_message">Image %1$d sur %2$d...</string>
     <string name="pictures_loaded_message">Téléchargement des images terminé!</string>
-    <string name="pictures_loading_error_message">Une erreur est survenue pendant le téléchargement des images...</string>
+    <string name="pictures_loading_error_message">Une erreur est survenue pendant le téléchargement des images...\n(Peut-être le fichier est-il mal nommé, trop volumineux, ou corrompu.)</string>
     <string name="pictures_saving_error_message">Une erreur est survenue pendant l\'enregistrement des images...</string>
 
     <string name="datas_last_download_label">Télécharger les données maintenant</string>
@@ -94,7 +93,7 @@
     <string name="rest_screen_choice_select">Galerie</string>
 
     <string name="custom_welcome_text_label">Text du message d\'accueil : </string>
-    <string name="welcome_text_default">Bienvenue sur le book de La Bête Humaine.\n Toucher l\'écran pour démarrer...</string>
+    <string name="welcome_text_default">Bienvenue sur le book de La Bête Humaine.\nToucher l\'écran pour démarrer...</string>
 
     <string name="display_welcome_text_on_gallery_screen_label">Afficher l\'invite sur la galerie : </string>
     <string name="display_welcome_text_on_gallery_screen_explanation">Afficher le texte du message d\'accueil sur la Galerie des tatoueurs (le message sera sur une seule ligne si possible)"</string>
@@ -136,13 +135,12 @@
     </string>
 
     <string name="legal_mention_title">Données personnelles</string>
-    <string name="legal_mention_text">
-\tLes informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé par La Bête Humaine pour
-la gestion d\'une base de donnée clientèle.\n
-\tElles sont conservées pendant 5 ans et sont destinées au gérant de l\'entreprise.\n
-\tConformément à la loi « informatique et libertés », vous pouvez exercer votre droit d\'accès aux données vous concernant
+    <string name="legal_mention_text">Les informations recueillies sur ce formulaire sont enregistrées dans un fichier informatisé par La Bête Humaine pour
+la gestion d\'une base de donnée clientèle et pour satisfiare à des obligations légales.\n
+\nElles sont conservées pendant 10 ans et sont destinées au gérant de l\'entreprise.\n
+\nConformément à la loi « informatique et libertés », vous pouvez exercer votre droit d\'accès aux données vous concernant
 et les faire rectifier en contactant : Pierre-Gilles Romieu - pgromieu@gmail.com.\n
-\tNous vous informons de l\’existence de la liste d\'opposition au démarchage téléphonique « Bloctel », sur laquelle
+\nNous vous informons de l\’existence de la liste d\'opposition au démarchage téléphonique « Bloctel », sur laquelle
 vous pouvez vous inscrire sur le site officiel : bloctel.fr/</string>
 
     <string name="understood_button_label">J\'ai compris</string>
@@ -150,14 +148,15 @@ vous pouvez vous inscrire sur le site officiel : bloctel.fr/</string>
     <string name="prevalidation_warning_title">Attention</string>
     <string name="prevalidation_warning_text_error">Tous les champs du formulaire doivent être remplis.</string>
     <string name="prevalidation_warning_email_error">L\'adresse e-mail renseignée n\'est pas conforme.</string>
-    <string name="prevalidation_warning_text_major">En cliquant sur le bouton Valider ci-dessous, vous certifiez l\'exactitude des renseignements fournis. Vous certifiez être majeur en l\'ayant justifié par une pièce d\'identité, et ne faire l\'objet d\'aucune mesure de tutelle ou de curatelle, n\'avoir aucun problème physique, mental ou une condition médicale qui pourrait affecter directement ou indirectement votre choix d\'avoir un tatouage.\nVous consentez également à suivre toutes les instructions qui vous seront données par le tatoueur pour les premiers soins à accorder à votre tatouage.</string>
-    <string name="prevalidation_warning_text_underage">En cliquant sur le bouton Valider ci-dessous, vous certifiez l\'exactitude des renseignements fournis. Vous consentez également à suivre toutes les instructions qui vous seront données par le tatoueur pour les premiers soins à accorder à votre tatouage.\nVotre tuteur légal doit maintenant remplir la suite du formulaire.</string>
+    <string name="prevalidation_warning_text_major">En cliquant sur le bouton Valider ci-dessous, vous certifiez l\'exactitude des renseignements fournis. Vous certifiez être majeur en l\'ayant justifié par une pièce d\'identité, et ne faire l\'objet d\'aucune mesure de tutelle ou de curatelle, n\'avoir aucun problème physique, mental ou une condition médicale qui pourrait affecter directement ou indirectement votre choix d\'avoir un tatouage.\nVous consentez également à suivre toutes les instructions qui vous seront données par le tatoueur pour les premiers soins à accorder à votre tatouage.\nEnfin, vous déclarez avoir pris connaissance du document affiché "Tatouages, maquillages permanents et piercing, quels risques, quelles précautions?" du Ministère de la Santé.</string>
+    <string name="prevalidation_warning_text_underage">En cliquant sur le bouton Valider ci-dessous, vous certifiez l\'exactitude des renseignements fournis. Vous consentez également à suivre toutes les instructions qui vous seront données par le tatoueur pour les premiers soins à accorder à votre tatouage.\n Enfin, vous déclarez avoir pris connaissance du document affiché "Tatouages, maquillages permanents et piercing, quels risques, quelles précautions?" du Ministère de la Santé.\nVotre tuteur légal doit maintenant remplir la suite du formulaire.</string>
     <string name="prevalidation_warning_text_underage_tutor">%1$s, %2$s, en cliquant sur le bouton Valider ci-dessous, vous certifiez avoir pris connaissance du présent contrat, et certifiez l\'exactitude des renseignements fournis. \nVous autorisez l\'artiste à tatouer %3$s %4$s, dont vous êtes le tuteur légal, et dégagez l\'artiste de toute responsabilité.</string>
     <string name="formWhichArtist">Indiquez votre tatoueur</string>
     <string name="formClientFirstname">Prénom</string>
     <string name="formClientName">Nom</string>
     <string name="formClientEmail">E-mail</string>
     <string name="formClientPhone">N° de téléphone</string>
+    <string name="formClientAddress">Adresse</string>
     <string name="formClientZipcode">Code postal</string>
     <string name="formClientBirthDate">Date de naissance</string>
     <string name="formClientIDNumber">N° de carte d\'identité, pour les mineurs</string>
@@ -166,6 +165,4 @@ vous pouvez vous inscrire sur le site officiel : bloctel.fr/</string>
     <string name="formParentIDNumber">N° de carte d\'identité du tuteur légal</string>
     <string name="formValidateButton">Valider</string>
     <string name="linkLegalMention"><u>Mentions légales...</u></string>
-
-
 </resources>

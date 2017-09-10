@@ -23,7 +23,7 @@ public class DialogFragmentWelcomeTextEdit extends DialogFragment {
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "CONSTRUCTOR - EMPTY");
         }
     }
@@ -53,7 +53,7 @@ public class DialogFragmentWelcomeTextEdit extends DialogFragment {
     //piggyback onStart to implement custom behavior on positive button (with controlled dismissal)
     @Override
     public void onStart(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onStart");
         }
         super.onStart();
@@ -67,7 +67,7 @@ public class DialogFragmentWelcomeTextEdit extends DialogFragment {
     private View.OnClickListener onPositiveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onPositiveClickListener");
             }
             //close dialog, transmit new value to MainActivity which will handle the rest
@@ -79,7 +79,7 @@ public class DialogFragmentWelcomeTextEdit extends DialogFragment {
 
     private DialogInterface.OnClickListener onNegativeClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onNegativeClickListener");
             }
             //"cancel" => just close the dialog

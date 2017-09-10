@@ -17,11 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
+import fr.shining_cat.labetehumaine.tools.LocalXMLParser;
 import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
 
 import static java.util.Calendar.DAY_OF_MONTH;
@@ -44,6 +46,7 @@ public class FormActivity extends AppCompatActivity {
     private String clientFirstname;
     private String clientEmail;
     private String clientPhone;
+    private String clientAddress;
     private String clientZipCode;
     private String clientBirthdate;
     private String clientIDNumber;
@@ -51,12 +54,12 @@ public class FormActivity extends AppCompatActivity {
     private String parentFirstname;
     private String parentIDNumber;
 
-
+/*TODO : masque de saisie pour formatter le n° de telephone! */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreate");
         }
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -79,22 +82,23 @@ public class FormActivity extends AppCompatActivity {
         linkLegalMentions.setOnClickListener(linkLegalMentionsClickListener);
         Button validationButton = (Button) findViewById(R.id.formValidateButton);
         validationButton.setOnClickListener(validationButtonClickListener);
-        /*TODO:
-        -ne pas oublier de stocker la date
-        -bouton pour lire le texte officiel dans une popup
-        -envoi email confirmation ok - gestion erreurs
-        -écriture des données dans le fichier - gestion erreurs
-        -popup de confirmation
-         */
     }
-
+    private boolean parseLocalXML(){
+        LocalXMLParser localXMLParser = new LocalXMLParser();
+        return localXMLParser.parseXMLdatas(this);
+    }
     private void populateRadioGroupFormWhichArtist(){
         RadioGroup radioGroupFormWhichArtist = (RadioGroup) findViewById(R.id.radioGroupFormWhichArtist);
-        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance(this);
-        int numberOfArtists = beteHumaineDatas.getShop().size();
+        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance();
+        if(!beteHumaineDatas.hasDatasReady()){
+            parseLocalXML();
+        }
+        ArrayList<ArtistDatas> shop = beteHumaineDatas.getShop();
+
+        int numberOfArtists = shop.size();
         RadioGroup.LayoutParams buttonParams = new RadioGroup.LayoutParams(RadioGroup.LayoutParams.MATCH_PARENT, RadioGroup.LayoutParams.WRAP_CONTENT, 1);
         for (int artistIndex = 0; artistIndex < numberOfArtists; artistIndex++) {
-            ArtistDatas artistDatas = beteHumaineDatas.getShop().get(artistIndex);
+            ArtistDatas artistDatas = shop.get(artistIndex);
             String artistName = artistDatas.getName();
             RadioButton artistButton = new RadioButton(this);
             //artistButton.setInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS); //=>does not work, try to format the name when the data is downloaded
@@ -106,7 +110,7 @@ public class FormActivity extends AppCompatActivity {
     private OnClickListener clientBirthDateEditTextClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "clientBirthDateEditTextClickListener::onClick");
             }
             showDatePicker();
@@ -116,7 +120,7 @@ public class FormActivity extends AppCompatActivity {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             if(hasFocus) {
-                if (MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "clientBirthDateEditTextClickListener::onFocus");
                 }
                 showDatePicker();
@@ -159,7 +163,7 @@ public class FormActivity extends AppCompatActivity {
                 (todayCalendar.get(MONTH) == clientBirthDate.get(MONTH) && todayCalendar.get(DAY_OF_MONTH) < clientBirthDate.get(DAY_OF_MONTH))) {
             diff--;
         }
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "checkClientMajority::age = " + diff);
         }
         clientIsMajor =!(diff < LEGAL_AGE_OF_CONSENT);
@@ -167,7 +171,7 @@ public class FormActivity extends AppCompatActivity {
         updateFormForLegalAge();
     }
     private void updateFormForLegalAge() {
-        if (MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "updateFormForLegalAge");
         }
         RelativeLayout layoutFormClientIDNumberLine = (RelativeLayout) findViewById(R.id.layoutFormClientIDNumberLine);
@@ -179,10 +183,10 @@ public class FormActivity extends AppCompatActivity {
             layoutFormClientIDNumberLine.setVisibility(View.VISIBLE);
         }
     }
-    private OnClickListener validationButtonClickListener = new View.OnClickListener() {
+    private OnClickListener validationButtonClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "validationButtonClickListener::onClick::clientIsMajor = " + clientIsMajor + " ; clientIsMinorAndHasFilledHisPart = " + clientIsMinorAndHasFilledHisPart);
             }
             if(clientIsMajor){
@@ -242,7 +246,7 @@ public class FormActivity extends AppCompatActivity {
         layoutFormParentIDNumberLine.setVisibility(visibilityAttribute);
     }
     private boolean checkFormIsCorrectlyFilled(){
-        if (MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "checkFormIsCorrectlyFilled");
         }
         boolean isOK = true;
@@ -253,7 +257,7 @@ public class FormActivity extends AppCompatActivity {
             RadioButton checkedButton = (RadioButton) findViewById(selectedRadio);
             selectedArtist = checkedButton.getText().toString();
         } else{
-            if (MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "checkFormIsCorrectlyFilled::NO selectedArtist");
             }
             isOK = false;
@@ -268,6 +272,8 @@ public class FormActivity extends AppCompatActivity {
         clientEmail = editTextFormClientEmail.getText().toString();
         EditText editTextFormClientPhone = (EditText) findViewById(R.id.editTextFormClientPhone);
         clientPhone = editTextFormClientPhone.getText().toString();
+        EditText editTextFormClientAddress = (EditText) findViewById(R.id.editTextFormClientAddress);
+        clientAddress = editTextFormClientAddress.getText().toString();
         EditText editTextFormClientZipcode = (EditText) findViewById(R.id.editTextFormClientZipcode);
         clientZipCode = editTextFormClientZipcode.getText().toString();
         String myFormat = "dd/MM/yyyy";
@@ -284,7 +290,7 @@ public class FormActivity extends AppCompatActivity {
         parentIDNumber = editTextFormParentIDNumber.getText().toString();
         //in every case do :
         if(clientName.equals("") || clientFirstname.equals("") || clientEmail.equals("") || clientPhone.equals("") || clientZipCode.equals("") || clientBirthdate.equals("")){
-            if (MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "checkFormIsCorrectlyFilled::there is one client field empty");
             }
             isOK = false;
@@ -292,12 +298,12 @@ public class FormActivity extends AppCompatActivity {
         } //we only check here that email field is non-empty, conformity check will be done later, allowing for a custom error message
 
         if(!clientIsMajor){
-            if (MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "checkFormIsCorrectlyFilled::!clientIsMajor");
             }
             //add testing for fields specific to underage client
             if(clientIDNumber.equals("")){
-                if (MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "checkFormIsCorrectlyFilled::clientIDNumber is empty");
                 }
                 isOK = false;
@@ -305,7 +311,7 @@ public class FormActivity extends AppCompatActivity {
             }
             if(clientIsMinorAndHasFilledHisPart){
                 if(parentFirstname.equals("") || parentName.equals("") || parentIDNumber.equals("")){
-                    if (MainActivity.DEBUG) {
+                    if (BuildConfig.DEBUG) {
                         Log.i(TAG, "checkFormIsCorrectlyFilled::there is one parent field empty");
                     }
                     isOK = false;
@@ -317,7 +323,7 @@ public class FormActivity extends AppCompatActivity {
     }
     private boolean checkEmailFieldConformity(){
         if(!android.util.Patterns.EMAIL_ADDRESS.matcher(clientEmail).matches()){
-            if (MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "checkEmailFieldConformity::email field is not conform");
             }
             return false;
@@ -327,7 +333,7 @@ public class FormActivity extends AppCompatActivity {
     private OnClickListener linkLegalMentionsClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "linkLegalMentionsClickListener::onClick");
             }
             SimpleDialogs.displayParamConfirmAlertDialog(
@@ -347,6 +353,7 @@ public class FormActivity extends AppCompatActivity {
         clientDatas.setClientBirthdate(clientBirthdate);
         clientDatas.setClientEmail(clientEmail);
         clientDatas.setClientPhone(clientPhone);
+        clientDatas.setClientAddress(clientAddress);
         clientDatas.setClientZipCode(clientZipCode);
         if(!clientIsMajor){
             clientDatas.setClientWasMajorAtRegistration(false);
@@ -355,12 +362,13 @@ public class FormActivity extends AppCompatActivity {
             clientDatas.setParentName(parentName);
             clientDatas.setParentIDNumber(parentIDNumber);
         }
-        if (MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "registerClientDatas" + clientDatas.toString());
         }
-        String ClientDatasFormatted = clientDatas.getDatasReadyForCSV();
-        if (MainActivity.DEBUG) {
-            Log.i(TAG, "registerClientDatas" + ClientDatasFormatted);
+        String clientLineDatasFormatted = clientDatas.getDatasReadyForCSV();
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "registerClientDatas" + clientLineDatasFormatted);
         }
+
     }
 }

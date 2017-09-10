@@ -1,19 +1,15 @@
 package fr.shining_cat.labetehumaine.tools;
 
-import android.app.Activity;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.shining_cat.labetehumaine.ArtistDatas;
-import fr.shining_cat.labetehumaine.MainActivity;
-import fr.shining_cat.labetehumaine.R;
+import fr.shining_cat.labetehumaine.BuildConfig;
 
 /**
  * Created by Shiva on 18/06/2016.
@@ -23,112 +19,48 @@ public class BeteHumaineDatas {
     private final String TAG = "LOGGING::" + this.getClass().getSimpleName();
 
     private static BeteHumaineDatas beteHumaineDatasSingleton = null;
+    /*TODO : can't have a static singleton with references to mActivity => dissociate the datas-grabber-part and the datas-holder-part*/
 
-    public static final String XML_LOCAL_FILE_NAME = "bete_humaine_datas.xml";
+    static final String XML_LOCAL_GENERAL_DATAS_FILE_NAME = "bete_humaine_datas.xml";
     public static final String PICTURES_LOCAL_ROOT_FOLDER = "bete_humaine_pics";
 
-    private Activity mActivity;
     private boolean haveDatasAvailable = false;
     private ArrayList<ArtistDatas> shop;
-    private String waitingScreenText = "";
 
-    private BeteHumaineDatas(Activity activity){
-        if(MainActivity.DEBUG) {
+    private BeteHumaineDatas(){
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "CONSTRUCTOR - EMPTY");
         }
-        mActivity = activity;
     }
 
-    public static BeteHumaineDatas getInstance(Activity activity){
+    public static BeteHumaineDatas getInstance(){
         if(beteHumaineDatasSingleton == null){
-            beteHumaineDatasSingleton = new BeteHumaineDatas(activity);
+            beteHumaineDatasSingleton = new BeteHumaineDatas();
         }
         return beteHumaineDatasSingleton;
     }
 
+    public boolean hasDatasReady(){
+        return haveDatasAvailable;
+    }
     public ArrayList<ArtistDatas> getShop() {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "getShop::shop = " + shop);
+        }
         if(shop == null){
-            parseXMLdatas();
+            //parseXMLdatas(activity);
+            return null;
         }
         return shop;
     }
 
-    public String getWaitingScreenText(){
-        //TODO : supprimer proprement les références à ce welcome text : il est maintenant paramétré par l'utilisateur et stocké dans les sharedpref
-        if(waitingScreenText == null){
-            parseXMLdatas();
-        }
-        return waitingScreenText;
-    }
-    public int getTotalNumberOfPictures(){
-        int total = 0;
-        for (ArtistDatas artist : shop){
-            total += artist.getNumberOfTattoos();
-            total += artist.getNumberOfDrawings();
-        }
-        return total;
-    }
 
-    public boolean goGrabLocalDatasNow(){
-        if(MainActivity.DEBUG) {
-            Log.i(TAG, "goGrabLocalDatasNow");
-        }
-        boolean haveDatasAvailable;
-        haveDatasAvailable = parseXMLdatas();
-        return haveDatasAvailable;
-    }
-
-
-    public boolean hasDatas() {
-        return haveDatasAvailable;
-    }
-
-    private boolean parseXMLdatas(){
-        if(MainActivity.DEBUG) {
-            Log.i(TAG, "parseXMLdatas");
-        }
-        boolean success = false;
-        try {
-            if(MainActivity.DEBUG) {
-                Log.i(TAG, "parseXMLdatas :: mActivity = " + mActivity.toString());
-            }
-            // access the xml file and convert it to input stream
-            FileInputStream fileIS = mActivity.openFileInput(XML_LOCAL_FILE_NAME);
-            try {
-                XmlPullParserFactory xmlPullParserFactory = XmlPullParserFactory.newInstance();
-                xmlPullParserFactory.setNamespaceAware(false);
-                XmlPullParser parser = xmlPullParserFactory.newPullParser();
-                parser.setInput(fileIS, null);
-                //send inputStream to parser
-                getLoadedXmlValues(parser);
-                success = true;
-                if(MainActivity.DEBUG) {
-                    Log.i(TAG, "parseXMLdatas ParseXML = SUCCESS!");
-                }
-            } catch (XmlPullParserException e) {
-                e.printStackTrace();
-                if(MainActivity.DEBUG) {
-                    Log.i(TAG, "parseXMLdatas::XmlPullParserException = " + e.getMessage());
-                    Log.i(TAG, "parseXMLdatas :: XmlPullParserException :: mActivity = " + mActivity.toString());
-                }
-                SimpleDialogs.displayErrorAlertDialog(mActivity, mActivity.getString(R.string.error_xml_file_parsing));
-            }
-        }catch (IOException ioe) {
-            ioe.printStackTrace();
-            if(MainActivity.DEBUG) {
-                Log.i(TAG, "parseXMLdatas::IOException = " + ioe.getMessage());
-            }
-            SimpleDialogs.displayErrorAlertDialog(mActivity, mActivity.getString(R.string.error_xml_local_file_access));
-        }
-        return success;
-    }
-    private void getLoadedXmlValues(XmlPullParser parser) throws XmlPullParserException, IOException {
-        if(MainActivity.DEBUG) {
-            Log.i(TAG, "getLoadedXmlValues");
+    public void storeLoadedXmlValues(XmlPullParser parser) throws XmlPullParserException, IOException {
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "storeLoadedXmlValues");
         }
         //reset datas :
         haveDatasAvailable = false;
-        waitingScreenText = "";
         shop = null;
         //used only for the while loop :
         ArtistDatas currentArtist = null;
@@ -144,9 +76,7 @@ public class BeteHumaineDatas {
                     break;
                 case XmlPullParser.START_TAG:
                     name = parser.getName();
-                    if (name.equalsIgnoreCase("WELCOME_TEXT")) {
-                        waitingScreenText = parser.nextText();
-                    } else if (name.equalsIgnoreCase("ARTIST")) {
+                    if (name.equalsIgnoreCase("ARTIST")) {
                         currentArtist = new ArtistDatas();
                     } else if (currentArtist != null) {
                         if (name.equalsIgnoreCase("NAME")) {
@@ -179,15 +109,15 @@ public class BeteHumaineDatas {
             }
             eventType = parser.next();
         }
-        if(MainActivity.DEBUG) {
-            Log.i(TAG, "getLoadedXmlValues XML PARSED");
+        haveDatasAvailable = true;
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "storeLoadedXmlValues XML PARSED");
         }
     }
 
     @Override
     public String toString(){
         String stringDescription = "============================\n" + "shop DUMP-TO-STRING :\n";
-        stringDescription += "WAITING TEXT : " + waitingScreenText + "\n";
         stringDescription += "NUMBER OF ARTISTS : " + shop.size() + "\n";
         for (ArtistDatas artist : shop){
             stringDescription += artist.toString();

@@ -26,16 +26,16 @@ public class DialogFragmentNewPassword extends DialogFragment {
 
     // Container Activity must implement this interface
     public interface OnNewPasswordListener {
-        public void onNewPasswordFirstEntry(String password);
-        public void onNewPasswordSecondEntryCorrect(String password);
-        public void onNewPasswordDismiss();
+        void onNewPasswordFirstEntry(String password);
+        void onNewPasswordSecondEntryCorrect(String password);
+        void onNewPasswordDismiss();
     }
 
     public DialogFragmentNewPassword(){
         // Empty constructor is required for DialogFragment
         // Make sure not to add arguments to the constructor
         // Use `newInstance` instead as shown below
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "CONSTRUCTOR - EMPTY");
         }
     }
@@ -65,7 +65,7 @@ public class DialogFragmentNewPassword extends DialogFragment {
     //piggyback onStart to implement custom behavior on positive button (with controlled dismissal)
     @Override
     public void onStart(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onStart");
         }
         super.onStart();
@@ -92,15 +92,15 @@ public class DialogFragmentNewPassword extends DialogFragment {
     private View.OnClickListener onPositiveClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onPositiveClickListener - 1");
             }
             String newPass = newPasswordText.getText().toString();
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onPositiveClickListener - 2 newPass = " + newPass);
             }
             if(newPass.equals("")){
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - 3 newPass EMPTY");
                 }
                 Toast message = Toast.makeText(getContext(), getString(R.string.empty_password), Toast.LENGTH_SHORT);
@@ -110,17 +110,17 @@ public class DialogFragmentNewPassword extends DialogFragment {
                 return;
             }
             if(previousPass.equals("")){
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - 4 previousPass EMPTY => first step");
                 }
                 mCallback.onNewPasswordFirstEntry(newPass);
                 dismiss();
             } else if(checkPassword(newPass)){
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - 5 passwords consistent");
                 }
                 //password correct => close dialog, MainActivity will handle the rest
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - password correct");
                 }
                 mCallback.onNewPasswordSecondEntryCorrect(newPass);
@@ -131,7 +131,7 @@ public class DialogFragmentNewPassword extends DialogFragment {
                 message.setGravity(Gravity.CENTER, message.getXOffset()/2, message.getYOffset()/2);
                 message.show();
                 newPasswordText.setText("");
-                if(MainActivity.DEBUG) {
+                if (BuildConfig.DEBUG) {
                     Log.i(TAG, "onPositiveClickListener - second password incorrect");
                 }
             }
@@ -140,7 +140,7 @@ public class DialogFragmentNewPassword extends DialogFragment {
 
     private DialogInterface.OnClickListener onNegativeClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int whichButton) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onNegativeClickListener");
             }
             //"cancel" => notify activity, then close the dialog

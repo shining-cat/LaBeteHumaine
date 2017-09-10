@@ -22,8 +22,10 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
+import fr.shining_cat.labetehumaine.tools.LocalXMLParser;
 import fr.shining_cat.labetehumaine.tools.ScreenSize;
 
 /**
@@ -71,7 +73,7 @@ public class FragmentArtistCard extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView");
         }
         super.onCreateView(inflater, container, savedInstanceState);
@@ -98,8 +100,13 @@ public class FragmentArtistCard extends Fragment {
         }
         //front layout
         mCardFrontLayout = view.findViewById(R.id.card_front);
-        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance(getActivity());
-        ArtistDatas artistDatas = beteHumaineDatas.getShop().get(artistIndex);
+        BeteHumaineDatas beteHumaineDatas = BeteHumaineDatas.getInstance();
+        if(!beteHumaineDatas.hasDatasReady()){
+            parseLocalXML();
+        }
+        ArrayList<ArtistDatas> shop = beteHumaineDatas.getShop();
+
+        ArtistDatas artistDatas = shop.get(artistIndex);
         ImageView artistFaceImage = (ImageView) view.findViewById(R.id.artist_card_face_image_view);
         String artistFacePictureFileName = getParentFragment().getActivity().getFilesDir() + File.separator + artistDatas.getArtistLocalRootFolderName() + File.separator + artistDatas.getPictureLocalName();
         File artistFacePictureFile = new File(artistFacePictureFileName);
@@ -145,10 +152,13 @@ public class FragmentArtistCard extends Fragment {
         activateInteractions();
         return view;
     }
-
+    private boolean parseLocalXML(){
+        LocalXMLParser localXMLParser = new LocalXMLParser();
+        return localXMLParser.parseXMLdatas(this.getActivity());
+    }
     @Override
     public void onAttach(Context context) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onAttach");
         }
         super.onAttach(context);
@@ -157,7 +167,7 @@ public class FragmentArtistCard extends Fragment {
 
     @Override
     public void onDetach() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onDetach");
         }
         super.onDetach();
@@ -167,7 +177,7 @@ public class FragmentArtistCard extends Fragment {
     private View.OnClickListener onClickFrontFace =new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onClickFrontFace");
             }
             flipCard(v);
@@ -177,7 +187,7 @@ public class FragmentArtistCard extends Fragment {
     private View.OnClickListener onTattoosClicked =new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onTattoosClicked");
             }
             listener.onArtistCardClicked(artistIndex, TATTOOS_WAS_CLICKED);
@@ -186,7 +196,7 @@ public class FragmentArtistCard extends Fragment {
     private View.OnClickListener onDrawingsClicked =new View.OnClickListener(){
         @Override
         public void onClick(View v) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onDrawingsClicked");
             }
             listener.onArtistCardClicked(artistIndex, DRAWINGS_WAS_CLICKED);
@@ -254,14 +264,14 @@ public class FragmentArtistCard extends Fragment {
 
     private void activateInteractions() {
         if(mIsBackVisible){
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "activateInteractions::BACK");
             }
             openTattoos.setOnClickListener(onTattoosClicked);
             openDrawings.setOnClickListener(onDrawingsClicked);
             mCardFrontLayout.setOnClickListener(null);
         } else{
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "activateInteractions::FRONT");
             }
             mCardFrontLayout.setOnClickListener(onClickFrontFace);

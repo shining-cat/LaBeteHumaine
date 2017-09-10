@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import org.apache.commons.text.WordUtils;
 
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
 
@@ -26,16 +27,19 @@ public class ArtistDatas {
 
 
     public ArtistDatas(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "ArtistDatas object created");
         }
     }
 
     public void setName(String name) {
-        this.name = name;
-        /*TODO : add capability to change this string by capitalizing every firdst letter of every name,
-        to prevent having smth like pierre-gilles Romieu
-         */
+        String capitalizedName = name;
+        capitalizedName = WordUtils.capitalizeFully(name, ' ', '-', '_');
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "setName initial name = " + name + " -- Caps name = " + capitalizedName);
+        }
+        this.name = capitalizedName;
+
         artistLocalRootFolderName = BeteHumaineDatas.PICTURES_LOCAL_ROOT_FOLDER + File.separator + name.replaceAll("[^A-Za-z0-9]", "");
         tattoosLocalFolderPath = artistLocalRootFolderName + File.separator + "tattoos";
         drawingsLocalFolderPath = artistLocalRootFolderName + File.separator + "drawings";

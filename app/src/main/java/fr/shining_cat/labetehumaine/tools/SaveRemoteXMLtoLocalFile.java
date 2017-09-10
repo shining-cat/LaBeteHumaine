@@ -13,6 +13,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import fr.shining_cat.labetehumaine.BuildConfig;
 import fr.shining_cat.labetehumaine.MainActivity;
 import fr.shining_cat.labetehumaine.R;
 
@@ -39,7 +40,7 @@ public class SaveRemoteXMLtoLocalFile extends AsyncTask<URL, Integer, Long> {
 
     @Override
     protected void onPreExecute(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "SaveRemoteXMLtoLocalFile::onPreExecute");
         }
         super.onPreExecute();
@@ -50,7 +51,7 @@ public class SaveRemoteXMLtoLocalFile extends AsyncTask<URL, Integer, Long> {
 
     @Override
     protected Long doInBackground(URL... params) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "SaveRemoteXMLtoLocalFile::doInBackground");
         }
         HttpURLConnection connection = null;
@@ -75,7 +76,7 @@ public class SaveRemoteXMLtoLocalFile extends AsyncTask<URL, Integer, Long> {
                 }
 
                 //write content as string to file :
-                String filename = BeteHumaineDatas.XML_LOCAL_FILE_NAME;
+                String filename = BeteHumaineDatas.XML_LOCAL_GENERAL_DATAS_FILE_NAME;
                 String fileContent = builder.toString();
                 FileOutputStream outputStream;
                 try {
@@ -102,7 +103,7 @@ public class SaveRemoteXMLtoLocalFile extends AsyncTask<URL, Integer, Long> {
 
     @Override
     protected void onPostExecute(Long result) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "SaveRemoteXMLtoLocalFile::onPostExecute");
         }
         super.onPostExecute(result);

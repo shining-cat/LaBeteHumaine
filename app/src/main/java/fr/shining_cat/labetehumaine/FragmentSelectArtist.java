@@ -10,7 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
+import fr.shining_cat.labetehumaine.tools.LocalXMLParser;
 
 import static android.content.Context.MODE_PRIVATE;
 import static fr.shining_cat.labetehumaine.MainActivity.SETTINGS_FILE_NAME;
@@ -33,22 +36,30 @@ public class FragmentSelectArtist extends Fragment {
         void updateActionBarTitle(String title);
         void updateCurrentFragmentShownVariable(Fragment fragment);
     }
-
+    private boolean parseLocalXML(){
+        LocalXMLParser localXMLParser = new LocalXMLParser();
+        return localXMLParser.parseXMLdatas(this.getActivity());
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView");
         }
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_select_artist, container, false);
         view.invalidate();
-        beteHumaineDatas = BeteHumaineDatas.getInstance(getActivity());
+        beteHumaineDatas = BeteHumaineDatas.getInstance();
+        if(!beteHumaineDatas.hasDatasReady()){
+            parseLocalXML();
+        }
+        ArrayList<ArtistDatas> shop = beteHumaineDatas.getShop();
+
         SharedPreferences savedSettings = getActivity().getSharedPreferences(SETTINGS_FILE_NAME, MODE_PRIVATE);
         Boolean forceFitArtistsCardsOnGalleryScreen = savedSettings.getBoolean(getString(R.string.force_fit_artists_cards_to_gallery_screen_pref_key), false);
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView::forceFitArtistsCardsOnGalleryScreen = " + forceFitArtistsCardsOnGalleryScreen);
         }
-        int numberOfArtists = beteHumaineDatas.getShop().size();
+        int numberOfArtists = shop.size();
         if(firstInit) {
             for (int artistIndex = 0; artistIndex < numberOfArtists; artistIndex++) {
                 FragmentTransaction fragmentTransaction = this.getChildFragmentManager().beginTransaction();
@@ -67,7 +78,7 @@ public class FragmentSelectArtist extends Fragment {
 
     @Override
     public void onAttach(Context context) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onAttach");
         }
         super.onAttach(context);
@@ -80,7 +91,7 @@ public class FragmentSelectArtist extends Fragment {
     // remove listeners etc when Fragment detached
     @Override
     public void onDetach() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onDetach");
         }
         super.onDetach();

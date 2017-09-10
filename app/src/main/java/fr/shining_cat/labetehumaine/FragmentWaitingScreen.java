@@ -41,7 +41,7 @@ public class FragmentWaitingScreen extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView");
         }
         super.onCreateView(inflater, container, savedInstanceState);
@@ -50,7 +50,7 @@ public class FragmentWaitingScreen extends Fragment {
         Point realScreenSize = ScreenSize.getRealScreenSize(getActivity());
         int screenWidth = realScreenSize.x;
         int screenHeight = realScreenSize.y;
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView::SCREEN SIZE : width = " + screenWidth + " X height = " + screenHeight);
         }
         //get reference to display elements
@@ -78,7 +78,7 @@ public class FragmentWaitingScreen extends Fragment {
     // set WaitingScreenListener when fragment attached
     @Override
     public void onAttach(Context context) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onAttach");
         }
         super.onAttach(context);
@@ -90,7 +90,7 @@ public class FragmentWaitingScreen extends Fragment {
     // remove WaitingScreenListener when Fragment detached
     @Override
     public void onDetach() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onDetach");
         }
         super.onDetach();
@@ -98,7 +98,7 @@ public class FragmentWaitingScreen extends Fragment {
         stopPulsingWelcomeText();
     }
     private void launchPulsingWelcomeText(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "launchPulsingWelcomeText - 1");
         }
         // load the animation
@@ -106,7 +106,7 @@ public class FragmentWaitingScreen extends Fragment {
         welcomeTextView.startAnimation(animBlink);
     }
     private void stopPulsingWelcomeText(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "stopPulsingWelcomeText");
         }
         animBlink.cancel();

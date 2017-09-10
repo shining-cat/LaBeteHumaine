@@ -51,7 +51,7 @@ public class FragmentArtistGallery  extends Fragment{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onCreateView");
         }
         super.onCreateView(inflater, container, savedInstanceState);
@@ -96,7 +96,7 @@ public class FragmentArtistGallery  extends Fragment{
     private AdapterView.OnItemClickListener onThumnailClicked = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onItemClick :: position = " + position + " // id = " + id);
             }
             listener.onArtistGalleryClicked(position);
@@ -105,7 +105,7 @@ public class FragmentArtistGallery  extends Fragment{
 
     @Override
     public void onAttach(Context context) {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onAttach");
         }
         super.onAttach(context);
@@ -118,7 +118,7 @@ public class FragmentArtistGallery  extends Fragment{
     // remove ArtistGalleryListener when Fragment detached
     @Override
     public void onDetach() {
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "onDetach");
         }
         super.onDetach();

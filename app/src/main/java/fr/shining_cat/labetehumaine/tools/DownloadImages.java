@@ -9,6 +9,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import fr.shining_cat.labetehumaine.BuildConfig;
 import fr.shining_cat.labetehumaine.MainActivity;
 import fr.shining_cat.labetehumaine.R;
 
@@ -32,9 +33,9 @@ public class DownloadImages {
 
     // Caller must implement this interface
     public interface DownloadImagesListener {
-        public void onDownloadImagesComplete();
-        public void onDownloadImagesError(String errorURL);
-        public void onSaveImagesError(String fileName, String errorMessage);
+        void onDownloadImagesComplete();
+        void onDownloadImagesError(String errorURL);
+        void onSaveImagesError(String fileName, String errorMessage);
     }
 
     public DownloadImages(Activity activity) {
@@ -44,7 +45,7 @@ public class DownloadImages {
 
 
     public void launchDownload(ArrayList<String> urls, String loadingTitle, String folderPath){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "launchDownload :: " + loadingTitle);
         }
         mFolderPath = folderPath;
@@ -61,12 +62,12 @@ public class DownloadImages {
     private void downloadNextPicture(){
         //continue loading queue loop to next item
         if (picturesIterator.hasNext()){
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadNextPicture :: NEXT PICTURE");
             }
             currentlyLoadingURL = picturesIterator.next();
             currentlyLoadingURLIndex +=1;
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadNextPicture :: currentlyLoadingURL = " + currentlyLoadingURL);
             }
             final BasicImageDownloader downloader = new BasicImageDownloader(basicImageLoaderListener);
@@ -74,7 +75,7 @@ public class DownloadImages {
             downloader.download(currentlyLoadingURL, true);
         } else{
             //exit loading queue loop
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "downloadNextPicture :: QUEUE END");
             }
             resetVariables();
@@ -96,7 +97,7 @@ public class DownloadImages {
     }
 
     private void resetVariables(){
-        if(MainActivity.DEBUG) {
+        if (BuildConfig.DEBUG) {
             Log.i(TAG, "resetVariables");
         }
         currentlyLoadingURL = "";
@@ -108,7 +109,7 @@ public class DownloadImages {
     private BasicImageDownloader.OnImageLoaderListener basicImageLoaderListener = new BasicImageDownloader.OnImageLoaderListener() {
         @Override
         public void onError(BasicImageDownloader.ImageError error) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onError :: Error code " + error.getErrorCode() + ": " + error.getMessage());
             }
             error.printStackTrace();
@@ -143,7 +144,7 @@ public class DownloadImages {
     private BasicImageDownloader.OnBitmapSaveListener onBitmapSaveListener = new BasicImageDownloader.OnBitmapSaveListener() {
         @Override
         public void onBitmapSaveError(BasicImageDownloader.ImageError error) {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onBitmapSaveError :: Error code " + error.getErrorCode() + ": " + error.getMessage());
             }
             error.printStackTrace();
@@ -157,7 +158,7 @@ public class DownloadImages {
         }
         @Override
         public void onBitmapSaved() {
-            if(MainActivity.DEBUG) {
+            if (BuildConfig.DEBUG) {
                 Log.i(TAG, "onBitmapSaved :: " + currentlyWritingFile.getAbsolutePath());
             }
             currentlyWritingFile = null;

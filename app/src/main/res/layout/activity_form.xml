@@ -188,6 +188,34 @@
                 android:paddingTop="@dimen/activity_vertical_margin">
 
                 <TextView
+                    android:id="@+id/labelFormClientAddress"
+                    android:layout_width="@dimen/form_left_column_width"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="@string/formClientAddress"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/editTextFormClientAddress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/labelFormClientAddress"
+                    android:hint="@string/formClientAddress"
+                    android:inputType="text"
+                    android:textSize="10pt"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <TextView
                     android:id="@+id/labelFormClientZipcode"
                     android:layout_width="@dimen/form_left_column_width"
                     android:layout_height="wrap_content"
