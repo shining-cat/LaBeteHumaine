@@ -32,12 +32,20 @@
     <string name="datas_last_download_pref_key">datas_last_dl</string>
     <string name="waiting_delay_pref_key">waiting_delay</string>
     <string name="number_of_columns_pref_key">number_columns</string>
+    <string name="show_client_form_access_button_pref_key">client_form_active</string>
+    <string name="idle_delay_on_client_form_pref_key">idle_delay_on_client_form</string>
+    <string name="last_db_export_to_csv_pref_key">last_db_export_to_csv</string>
+    <string name="email_export_address_pref_key">email_export_address</string>
 
+    <string name="export_db_folder_name">BETE_HUMAINE_EXPORTS</string>
+    <string name="export_db_file_base_name">_export-fichier-clients_Bete-Humaine.csv</string>
 
     <string name="confirm_button_label">On y va!</string>
     <string name="cancel_button_label">Oups!</string>
+    <string name="ok_button_label">OK</string>
     <string name="download_button_label">Télécharger</string>
     <string name="edit_button_label">Modifier</string>
+    <string name="not_now_button_label">Plus tard...</string>
 
     <string name="confirm_value_set_message">Modification enregistrée.</string>
     <string name="attention_title">Hey!</string>
@@ -46,6 +54,8 @@
     <string name="error_bad_url">L\'adresse entrée n\'est pas conforme.</string>
     <string name="error_write_local_file">Impossible de sauvegarder le fichier local.</string>
     <string name="error_no_internet_access">Pas d\'accès Internet.</string>
+    <string name="error_reading_distant_xml">Impossible de lire le fichier XML distant.</string>
+    <string name="error_retrieving_distant_xml">Une erreur est survenue lors de la récupération des données XML distantes.</string>
     <string name="error_no_connection">Impossible de se connecter.</string>
     <string name="error_xml_local_file_access">Fichier local XML non accessible. Essayer de le télécharger (à nouveau).</string>
     <string name="error_xml_file_parsing">Fichier XML non lisible.</string>
@@ -54,6 +64,12 @@
     <string name="error_pictures_older_than_xml">Les images n\'ont pas été mises à jour depuis le dernier téléchargement du fichier XML.</string>
     <string name="error_loading_picture">Une erreur est survenue lors du chargement de l\'image.</string>
     <string name="error_reading_pictures">Une erreur est survenue lors de la lecture des images.</string>
+    <string name="error_creating_DB_export_folder">Impossible de créer le dossier de sauvegarde.</string>
+    <string name="error_creating_DB_export_file">Impossible de créer le fichier de sauvegarde.</string>
+    <string name="error_generating_csv_filename">Erreur lors de la génération du nom du fichier CSV.</string>
+    <string name="error_retrieving_data_from_database">Erreur lors de la récupération des données de la base.</string>
+    <string name="error_external_storage_non_available">Impossible d\'accéder à l\'espace de stockage.</string>
+    <string name="error_exporting_db_to_csv">Une erreur s\'est produite, le fichier CSV n\'a pas été créé.</string>
 
 
     <string name="admin_code_request_label">Pour continuer, entrer le mot de passe</string>
@@ -101,7 +117,7 @@
     <string name="display_welcome_text_on_gallery_screen_toggle_inactive">Non</string>
 
     <string name="force_fit_gallery_label">Forcer la galerie à l\'écran : </string>
-    <string name="force_fit_gallery_explanation">Activer un scroll ou forcer toutes les cartes dans l\'écran pour la Galerie des tatoueurs"</string>
+    <string name="force_fit_gallery_explanation">Activer un scroll ou forcer toutes les cartes dans l\'écran pour la Galerie des tatoueurs</string>
     <string name="force_fit_gallery_toggle_active">Forcer</string>
     <string name="force_fit_gallery_toggle_inactive">Scroll</string>
 
@@ -118,6 +134,42 @@
     <string name="new_password_step2_title">Confirmer le mot de passe</string>
     <string name="different_passwords">Les mots de passe ne concordent pas!</string>
     <string name="empty_password">Entrer un mot de passe vide... un peu niais, non?</string>
+
+    <string name="activate_client_form_label">Activer le formulaire client : </string>
+    <string name="activate_client_form_explanation">Masquer ou afficher le bouton pour accéder au formulaire client. Cela n\'a aucun effet sur les données déjà enregistrées.</string>
+    <string name="activate_client_form_toggle_active">Montrer</string>
+    <string name="activate_client_form_toggle_inactive">Cacher</string>
+
+    <string name="form_idle_delay_label">Délai d\'inactivité avant fermeture du formulaire et retour à l\'écran principal</string>
+    <string name="form_idle_delay_value">%1$d secondes</string>
+    <string name="form_idle_delay_title">Délai d\'inactivité avant fermeture du formulaire</string>
+    <string name="form_idle_delay_unit">secondes</string>
+
+    <string name="email_export_address_label">Adresse e-mail de destination pour l\'envoi de l\'export de la base de données Clients : </string>
+    <string name="email_export_address_text_default">sh1v4b3rnh4rd@gmail.com</string>
+    <string name="email_export_subject">Export fichier clients La Bête Humaine</string>
+    <string name="email_export_intent_title">Envoyer le fichier CSV par email...</string>
+
+    <string name="clients_db_last_export_label">Exporter le fichier Clients</string>
+    <string name="clients_db_last_export_text_default">Fichier jamais exporté... %1$s fiche(s) dans la base de données.</string>
+    <string name="clients_db_last_export_text">Fichier exporté le %1$s. %2$s nouvelle(s) fiche(s) créée(s) depuis le dernier export.</string>
+    <string name="clients_db_retrieving">Récupération des données.</string>
+    <string name="clients_db_composing_csv">Composition du fichier CSV.</string>
+    <string name="clients_db_writing_csv_file">Écriture du fichier CSV.</string>
+    <string name="clients_db_export_complete_dialog_title">Fichier exporté.</string>
+    <string name="clients_db_export_complete_dialog_message">La base Clients a bien été exportée en CSV.\nVous pouvez suivre le lapin blanc pour l\'envoyer de suite, ou vous en occuper seul plus tard.\nFichier créé : %1$s</string>
+    <string name="clients_db_export_button_label">Exporter</string>
+
+    <string name="clients_db_erase_label">Supprimer la base de données Clients</string>
+    <string name="clients_db_erase_text_default">Effacer toutes les fiches client enregistrées sur cet appareil. Il y a %1$s fiche(s) au total dans la base de données.</string>
+    <string name="clients_db_nothing_to_erase_text">La base de données Clients est vide, rien à supprimer.</string>
+    <string name="clients_db_erase_forbidden_text">La base de données Clients ne peut être supprimé : il y a %1$s nouvelle(s) fiche(s) créée(s) depuis le dernier export. (%2$s fiches dans la base de données)</string>
+    <string name="clients_db_erasing">Suppression de la base de données Clients.</string>
+    <string name="clients_db_erase_complete_message">Base de données Clients supprimée.</string>
+    <string name="clients_db_erase_error_message">Une erreur est survenue pendant la suppression de la base de données Clients.</string>
+    <string name="clients_db_erase_dialog_title">ATTENTION! Supprimer la base de données Clients</string>
+    <string name="clients_db_erase_dialog_message">Vous vous apprêtez à supprimer la base de données Clients de cet appareil.\nCela n\'affectera pas les fichiers csv déjà exportés.</string>
+    <string name="clients_db_erase_button_label">Effacer</string>
 
     <string name="tattoos">Tattoos</string>
     <string name="drawings">Dessins</string>
@@ -165,4 +217,8 @@ vous pouvez vous inscrire sur le site officiel : bloctel.fr/</string>
     <string name="formParentIDNumber">N° de carte d\'identité du tuteur légal</string>
     <string name="formValidateButton">Valider</string>
     <string name="linkLegalMention"><u>Mentions légales...</u></string>
+    <string name="recordingClientInfos">Enregistrement des informations...</string>
+    <string name="recordingClientInfosSuccessTitle">Enregistrement</string>
+    <string name="recordingClientInfosSuccessText">Vos informations ont bien été enregistrées</string>
+    <string name="recordingClientInfosError">Une erreur est survenue lors de l\'enregistrement des informations</string>
 </resources>

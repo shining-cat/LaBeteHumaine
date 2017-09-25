@@ -19,7 +19,6 @@ public class BeteHumaineDatas {
     private final String TAG = "LOGGING::" + this.getClass().getSimpleName();
 
     private static BeteHumaineDatas beteHumaineDatasSingleton = null;
-    /*TODO : can't have a static singleton with references to mActivity => dissociate the datas-grabber-part and the datas-holder-part*/
 
     static final String XML_LOCAL_GENERAL_DATAS_FILE_NAME = "bete_humaine_datas.xml";
     public static final String PICTURES_LOCAL_ROOT_FOLDER = "bete_humaine_pics";
@@ -48,7 +47,6 @@ public class BeteHumaineDatas {
             Log.i(TAG, "getShop::shop = " + shop);
         }
         if(shop == null){
-            //parseXMLdatas(activity);
             return null;
         }
         return shop;

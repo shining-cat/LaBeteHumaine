@@ -1,10 +1,14 @@
 package fr.shining_cat.labetehumaine;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -22,24 +26,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 
+import fr.shining_cat.labetehumaine.tools.AsyncExportDBtoCSV;
+import fr.shining_cat.labetehumaine.tools.AsyncSaveRemoteXMLtoLocalFile;
 import fr.shining_cat.labetehumaine.tools.BeteHumaineDatas;
 import fr.shining_cat.labetehumaine.tools.DownloadImages;
 import fr.shining_cat.labetehumaine.tools.LocalXMLParser;
-import fr.shining_cat.labetehumaine.tools.SaveRemoteXMLtoLocalFile;
+import fr.shining_cat.labetehumaine.tools.SQLiteDBHelper;
 import fr.shining_cat.labetehumaine.tools.SimpleDialogs;
 
 /**
  * Created by Shiva on 08/06/2016.
  */
 
-//TODO ajout d'un bouton pour exporter les données collectées, au clic, génération du nouveau fichier par ClientDatas, retourne path ou fail, au retour path, supprimer fichier interne (tjs ClientDatas) et lancer intent fileExplorer pour localiser le fichier qui sera partagé par mail.
-//TODO : ajouter un switch pour activer/désactiver le formulaire client
 
 public class SettingsActivity extends AppCompatActivity
             implements  DialogFragmentAdminCodeRequest.OnAdminCodeRequestListener,
                         DialogFragmentNewPassword.OnNewPasswordListener,
-                        SaveRemoteXMLtoLocalFile.OnSaveRemoteToLocalListener,
-                        DownloadImages.DownloadImagesListener {
+                        AsyncSaveRemoteXMLtoLocalFile.OnSaveRemoteToLocalListener,
+                        DownloadImages.DownloadImagesListener,
+                        AsyncExportDBtoCSV.OnExportDBListener{
 
     private final String TAG = "LOGGING::" + this.getClass().getSimpleName();
 
@@ -52,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity
     private Iterator<ArtistDatas> shopIterator;
     private String currentlyLoadingCategory = "";
     private ArtistDatas currentArtistLoading;
+    private String justExportedCSVFileName;
 
 
     @Override
@@ -80,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity
         Button xmlFileAddressEditButton = (Button) findViewById(R.id.xml_file_address_edit_button);
         xmlFileAddressEditButton.setOnClickListener(xmlFileAddressEditButtonListener);
         //
-        updateLastDlXML(null);
+        updateLastDlXML(-1);
         Button downloadXMLFileButton = (Button) findViewById(R.id.xml_file_download_button);
         downloadXMLFileButton.setOnClickListener(downloadXMLFileButtonListener);
         //
@@ -122,9 +128,142 @@ public class SettingsActivity extends AppCompatActivity
         ToggleButton adminCodeToggleButton = (ToggleButton) findViewById(R.id.admin_code_toggle_button);
         adminCodeToggleButton.setChecked((current_mode.equals(MainActivity.KIOSK_MODE)));
         adminCodeToggleButton.setOnClickListener(adminCodeClicButtonlistener);
+        //
+        Boolean showClientFormAccessButton = savedSettings.getBoolean(getString(R.string.show_client_form_access_button_pref_key), false);
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "onStart::showClientFormAccessButton = " + showClientFormAccessButton);
+        }
+        ToggleButton showClientFormAccessButtonToggleButton = (ToggleButton) findViewById(R.id.activate_client_form_toggle_button);
+        showClientFormAccessButtonToggleButton.setChecked(showClientFormAccessButton);
+        showClientFormAccessButtonToggleButton.setOnClickListener(showClientFormAccessButtonClicButtonlistener);
+        //
+        updateIdleFormDelay(-1);
+        Button updateIdleFormDelayEditButton = (Button) findViewById(R.id.form_idle_delay_edit_button);
+        updateIdleFormDelayEditButton.setOnClickListener(idleFormDelayEditButtonListener);
+        //
+        updateEmailExportAddress("");
+        Button emailExportAddressEditButton = (Button) findViewById(R.id.email_export_address_edit_button);
+        emailExportAddressEditButton.setOnClickListener(emailExportAddressEditButtonListener);
+        //
+        updateLastExportDB(-1);
+        Button exportDBtoCSVButton = (Button) findViewById(R.id.clients_db_export_button);
+        SQLiteDBHelper dbHelper = new SQLiteDBHelper(this);
+        int numberOfRecords = dbHelper.getTotalNumberOfRecords();
+        if(numberOfRecords > 0) {
+            exportDBtoCSVButton.setOnClickListener(exportDBtoCSVButtonListener);
+        } else{
+            exportDBtoCSVButton.setVisibility(View.INVISIBLE);
+        }
+        //
+        updateDeleteDB();
+        Button deleteDBButton = (Button) findViewById(R.id.erase_clients_db_button);
+        deleteDBButton.setOnClickListener(deleteDBButtonListener);
+
 
     }
 
+    private OnClickListener exportDBtoCSVButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "exportDBtoCSVButtonListener::onClick");
+            }
+            AsyncExportDBtoCSV asyncExportDBtoCSV = new AsyncExportDBtoCSV(SettingsActivity.this);
+            asyncExportDBtoCSV.execute();
+        }
+    };
+    public void onExportDBtoCSVComplete(String exportedCSVFileName){
+        //AsyncExportDBtoCSV notifies us that DB export is complete, along with the resulting file path, or null;
+        if(exportedCSVFileName != null && !exportedCSVFileName.isEmpty()){
+            justExportedCSVFileName = exportedCSVFileName;
+            updateLastExportDB(System.currentTimeMillis());
+            updateDeleteDB();
+            SimpleDialogs.displayParamAlertDialogWithTwoListeners(this, onConfirmSendCSVexported, onDismissGotoCSVExported,
+                    getString(R.string.clients_db_export_complete_dialog_title), getString(R.string.clients_db_export_complete_dialog_message, exportedCSVFileName),
+                    getString(R.string.confirm_button_label), getString(R.string.not_now_button_label));
+        }else{
+            SimpleDialogs.displayErrorAlertDialog(SettingsActivity.this, getString(R.string.error_exporting_db_to_csv));
+        }
+    }
+    DialogInterface.OnClickListener onDismissGotoCSVExported = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onDismissGotoCSVExported");
+                dialog.dismiss();
+            }
+        }
+    };
+    DialogInterface.OnClickListener onConfirmSendCSVexported = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onConfirmSendCSVexported");
+            }
+            sendExportCSVInEmail();
+       }
+    };
+    private void sendExportCSVInEmail(){
+        if(justExportedCSVFileName!=null && !justExportedCSVFileName.isEmpty()) {
+            File documentsFolderPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+            File exportsStoragePath = new File(documentsFolderPath, SettingsActivity.this.getString(R.string.export_db_folder_name));
+            File exportFile = new File(exportsStoragePath, justExportedCSVFileName);
+            Uri path = Uri.fromFile(exportFile);
+            Intent emailIntent = new Intent(Intent.ACTION_SEND);
+            // set the type to 'email'
+            emailIntent.setType("vnd.android.cursor.dir/email");
+            String to[] = {savedSettings.getString(getString(R.string.email_export_address_pref_key), "")};
+            emailIntent.putExtra(Intent.EXTRA_EMAIL, to);
+            // the attachment
+            emailIntent.putExtra(Intent.EXTRA_STREAM, path);
+            // the mail subject
+            emailIntent.putExtra(Intent.EXTRA_SUBJECT, this.getString(R.string.email_export_subject));
+            startActivity(Intent.createChooser(emailIntent, this.getString(R.string.email_export_intent_title)));
+        } else{
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "no export csv file name!!!");
+            }
+        }
+    }
+    private OnClickListener deleteDBButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "deleteDBButtonListener::onClick");
+            }
+            SimpleDialogs.displayParamAlertDialogWithTwoListeners(SettingsActivity.this, onConfirmDeleteDB, onDismissDeleteDB,
+                    getString(R.string.clients_db_erase_dialog_title), getString(R.string.clients_db_erase_dialog_message),
+                    getString(R.string.clients_db_erase_button_label), getString(R.string.cancel_button_label));
+        }
+    };
+    DialogInterface.OnClickListener onDismissDeleteDB = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onDismissDeleteDB");
+                dialog.dismiss();
+            }
+        }
+    };
+    DialogInterface.OnClickListener onConfirmDeleteDB = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "onConfirmDeleteDB");
+            }
+            deleteDBClients();
+        }
+    };
+    private void deleteDBClients(){
+        SQLiteDBHelper dbHelper = new SQLiteDBHelper(this);
+        boolean deleteSuccess = dbHelper.deleteClientsDB();
+        if(deleteSuccess){
+            SimpleDialogs.displayGenericConfirmToast(this, this.getString(R.string.clients_db_erase_complete_message));
+            updateDeleteDB();
+        } else{
+            SimpleDialogs.displayErrorAlertDialog(this, this.getString(R.string.clients_db_erase_error_message));
+        }
+    }
     private OnClickListener xmlFileAddressEditButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -137,6 +276,20 @@ public class SettingsActivity extends AppCompatActivity
             DialogFragmentXMLFileAddressEdit dialogFragmentXMLFileAddressEdit =
                     DialogFragmentXMLFileAddressEdit.newInstance(getString(R.string.xml_file_address_label), currentXMLFileAddress);
             dialogFragmentXMLFileAddressEdit.show(fm, "dialog_fragment_xml_file_address_edit");
+        }
+    };
+    private OnClickListener emailExportAddressEditButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "emailExportAddressEditButtonListener::onClick");
+            }
+            String currentEmailExportAddress = savedSettings.getString(
+                    getString(R.string.email_export_address_pref_key), getString(R.string.email_export_address_text_default));
+            FragmentManager fm = getSupportFragmentManager();
+            DialogFragmentEmailExportAddressEdit dialogFragmentEmailExportAddressEdit =
+                    DialogFragmentEmailExportAddressEdit.newInstance(getString(R.string.email_export_address_label), currentEmailExportAddress);
+            dialogFragmentEmailExportAddressEdit.show(fm, "dialog_fragment_email_export_address_edit");
         }
     };
     private OnClickListener welcomeTextEditButtonListener = new OnClickListener() {
@@ -173,7 +326,7 @@ public class SettingsActivity extends AppCompatActivity
             if (networkInfo != null && networkInfo.isConnected()) {
                 try {
                     xmlFileURL = new URL(xmlFileAddress);
-                    SaveRemoteXMLtoLocalFile getRemoteXmlFile = new SaveRemoteXMLtoLocalFile(SettingsActivity.this);
+                    AsyncSaveRemoteXMLtoLocalFile getRemoteXmlFile = new AsyncSaveRemoteXMLtoLocalFile(SettingsActivity.this);
                     getRemoteXmlFile.execute(xmlFileURL);
                 }
                 catch (Exception e) {
@@ -190,11 +343,14 @@ public class SettingsActivity extends AppCompatActivity
 
         }
     };
-
-    public void onSaveRemoteXMLtoLocalFileComplete(Long aDate){
-        //SaveRemoteXMLtoLocalFile notifies us that xml download is complete, along with the resulting dl date
-        updateLastDlXML(aDate);
-        parseLocalXML();
+    public void onSaveRemoteXMLtoLocalFileComplete(String aDate){
+        //AsyncSaveRemoteXMLtoLocalFile notifies us that xml download is complete, along with the resulting dl date
+        if(aDate!=null && !aDate.isEmpty()) {
+            updateLastDlXML(new Long(aDate));
+            parseLocalXML();
+        } else{
+            //do nothing, we have already notify the user of the error
+        }
     }
 
     private OnClickListener downloadDatasButtonListener = new OnClickListener() {
@@ -350,6 +506,20 @@ public class SettingsActivity extends AppCompatActivity
             dialogFragmentWaitingDelayEdit.show(fm, "dialog_fragment_waiting_delay_edit");
         }
     };
+    private OnClickListener idleFormDelayEditButtonListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "idleFormDelayEditButtonListener::onClick");
+            }
+            int currentIdleFormDelay = savedSettings.getInt(getString(R.string.idle_delay_on_client_form_pref_key), FormActivity.INITIAL_IDLE_DELAY);
+            FragmentManager fm = getSupportFragmentManager();
+            DialogFragmentIdleFormDelayEdit dialogFragmentIdleFormDelayEdit =
+                    DialogFragmentIdleFormDelayEdit.newInstance(getString(R.string.form_idle_delay_title), currentIdleFormDelay);
+            dialogFragmentIdleFormDelayEdit.show(fm, "dialog_fragment_waiting_delay_edit");
+        }
+    };
+
     private OnClickListener numberOfColumnsEditButtonListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -384,6 +554,26 @@ public class SettingsActivity extends AppCompatActivity
                     getString(R.string.xml_file_address_pref_key), getString(R.string.xml_file_address_text_default)));
         }
     }
+    public void updateEmailExportAddress(String newEmailExportAddress) {
+        // DialogFragmentXMLFileAddressEdit notifies us that a new value has been entered for waiting delay
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "updateEmailExportAddress::newEmailExportAddress = " + newEmailExportAddress);
+        }
+        TextView emailExportAddressText = (TextView) findViewById(R.id.email_export_address_editText);
+        if(!newEmailExportAddress.equals("")) {//it's an edit
+            //save new value to sharedPreferences
+            SharedPreferences.Editor editor = savedSettings.edit();
+            editor.putString(getString(R.string.email_export_address_pref_key), newEmailExportAddress);
+            editor.apply();
+            //update displayed value
+            emailExportAddressText.setText(newEmailExportAddress);
+            //show confirm message
+            SimpleDialogs.displayValueSetConfirmToast(this);
+        } else {//it's a first time setting
+            emailExportAddressText.setText(savedSettings.getString(
+                    getString(R.string.email_export_address_pref_key), getString(R.string.email_export_address_text_default)));
+        }
+    }
     private void updateLastDldatas(Long mDate){
         TextView lastDownloadDatasText = (TextView) findViewById(R.id.last_datas_download_text);
         if(mDate != null) {//it's an edit
@@ -405,20 +595,66 @@ public class SettingsActivity extends AppCompatActivity
             }
         }
     }
-    private void updateLastDlXML(Long mDate){
+    private void updateLastExportDB(long mDate){ //
+        //mdate as System.currentTimeMillis();
+        TextView lastExportDBtoCSVText = (TextView) findViewById(R.id.clients_db_last_export_text);
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm:ss");
+        SQLiteDBHelper dbHelper = new SQLiteDBHelper(this);
+        String numberOfRecordsTotal = Integer.toString(dbHelper.getTotalNumberOfRecords());
+        long lastDBExport = savedSettings.getLong(getString(R.string.last_db_export_to_csv_pref_key), 0);
+        String numberOfRecordsSinceLastExport = Integer.toString(dbHelper.getNumberOfRecordsSinceDate(lastDBExport));
+        if(mDate != -1) {//it's an edit, we just exported the DB, so we update the lastExportPref value and adjust the displayed value
+            SharedPreferences.Editor editor = savedSettings.edit();
+            editor.putLong(getString(R.string.last_db_export_to_csv_pref_key), mDate);
+            editor.apply();
+            //update displayed value
+            lastDBExport = savedSettings.getLong(getString(R.string.last_db_export_to_csv_pref_key), 0);
+            numberOfRecordsSinceLastExport = Integer.toString(dbHelper.getNumberOfRecordsSinceDate(lastDBExport));
+            String dateString = formatter.format(new Date(mDate));
+            lastExportDBtoCSVText.setText(getString(R.string.clients_db_last_export_text, dateString, numberOfRecordsSinceLastExport));
+        } else{
+            //long lastDlXML = savedSettings.getLong(getString(R.string.last_db_export_to_csv_pref_key), 0);
+            if(lastDBExport != 0){//The DB has been exported previously, just display the correct date
+                String dateString = formatter.format(new Date(lastDBExport));
+                lastExportDBtoCSVText.setText(getString(R.string.clients_db_last_export_text, dateString, numberOfRecordsSinceLastExport));
+            } else { // the DB has never been exported
+                lastExportDBtoCSVText.setText(getString(R.string.clients_db_last_export_text_default, numberOfRecordsTotal));
+            }
+        }
+    }
+    private void updateDeleteDB(){ //
+        SQLiteDBHelper dbHelper = new SQLiteDBHelper(this);
+        int totalNumberOfRecords = dbHelper.getTotalNumberOfRecords();
+        long lastDBExport = savedSettings.getLong(getString(R.string.last_db_export_to_csv_pref_key), 0);
+        int numberOfRecordsSinceLastExport = dbHelper.getNumberOfRecordsSinceDate(lastDBExport);
+        Button deleteDBButton = (Button) findViewById(R.id.erase_clients_db_button);
+        TextView deleteDBText = (TextView) findViewById(R.id.erase_clients_db_text);
+        if(totalNumberOfRecords > 0){
+            if(numberOfRecordsSinceLastExport == 0) {//la base contient des fiches, aucune n'a été ajoutée depuis le dernier export => on peut effacer
+                deleteDBButton.setVisibility(View.VISIBLE);
+                deleteDBText.setText(getString(R.string.clients_db_erase_text_default, Integer.toString(totalNumberOfRecords)));
+            }else{//la base contient des fiches, mais certaines ont été ajoutées après le dernier export => interdit d'effacer
+                deleteDBButton.setVisibility(View.INVISIBLE);
+                deleteDBText.setText(getString(R.string.clients_db_erase_forbidden_text, Integer.toString(numberOfRecordsSinceLastExport), Integer.toString(totalNumberOfRecords)));
+            }
+        } else {//la base ne contient aucune fiche => rien à effacer
+            deleteDBButton.setVisibility(View.INVISIBLE);
+            deleteDBText.setText(getString(R.string.clients_db_nothing_to_erase_text));
+        }
+    }
+    private void updateLastDlXML(long mDate){
         TextView lastDownloadXMLFileText = (TextView) findViewById(R.id.last_xml_download_text);
-        if(mDate != null) {//it's an edit
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm:ss");
+        if(mDate != -1) {//it's an edit
             SharedPreferences.Editor editor = savedSettings.edit();
             editor.putLong(getString(R.string.xml_file_last_download_pref_key), mDate);
             editor.apply();
             //update displayed value
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm:ss");
             String dateString = formatter.format(new Date(mDate));
             lastDownloadXMLFileText.setText(getString(R.string.xml_file_last_download_text, dateString));
         } else{//it's a first time setting
             Long lastDlXML = savedSettings.getLong(getString(R.string.xml_file_last_download_pref_key), 0);
             if(lastDlXML != 0){
-                SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm:ss");
                 String dateString = formatter.format(new Date(lastDlXML));
                 lastDownloadXMLFileText.setText(getString(R.string.xml_file_last_download_text, dateString));
             } else { // aucune date enregistrée : le fichier n'a jamais été dl
@@ -446,6 +682,26 @@ public class SettingsActivity extends AppCompatActivity
             waitingDelayText.setText(getString(R.string.waiting_delay_value, delayValue));
         }
     }
+    public void updateIdleFormDelay(int newIdleFormDelay) {
+        // DialogFragmentIdleFormEdit notifies us that a new value has been entered for idleForm delay
+        if (BuildConfig.DEBUG) {
+            Log.i(TAG, "updateIdleFormDelay::newIdleFormDelay = " + newIdleFormDelay);
+        }
+        TextView idleFormDelayText = (TextView) findViewById(R.id.form_idle_delay_textfield);
+        if(newIdleFormDelay != -1) {//it's an edit
+            //save new value to sharedPreferences
+            SharedPreferences.Editor editor = savedSettings.edit();
+            editor.putInt(getString(R.string.idle_delay_on_client_form_pref_key), newIdleFormDelay);
+            editor.apply();
+            //update displayed value
+            idleFormDelayText.setText(getString(R.string.form_idle_delay_value, newIdleFormDelay));
+            //show confirm message
+            SimpleDialogs.displayValueSetConfirmToast(this);
+        } else {//it's a first time setting
+            int delayValue = savedSettings.getInt(getString(R.string.idle_delay_on_client_form_pref_key), FormActivity.INITIAL_IDLE_DELAY);
+            idleFormDelayText.setText(getString(R.string.form_idle_delay_value, delayValue));
+        }
+    }
     public void updateNumberOfColumns(int newNumberOfColumns) {
         // DialogFragmentNumberOfColumnsEdit notifies us that a new value has been entered
         if (BuildConfig.DEBUG) {
@@ -453,6 +709,9 @@ public class SettingsActivity extends AppCompatActivity
         }
         TextView numberOfColumnsText = (TextView) findViewById(R.id.number_of_columns_value);
         if(newNumberOfColumns != -1) {//it's an edit
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "newNumberOfColumns != -1 ");
+            }
             //save new value to sharedPreferences
             SharedPreferences.Editor editor = savedSettings.edit();
             editor.putInt(getString(R.string.number_of_columns_pref_key), newNumberOfColumns);
@@ -462,7 +721,13 @@ public class SettingsActivity extends AppCompatActivity
             //show confirm message
             SimpleDialogs.displayValueSetConfirmToast(this);
         } else {//it's a first time setting
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "first time setting " + getString(R.string.number_of_columns_pref_key) + " - " + FragmentArtistGallery.DEFAULT_NUM_OF_COLUMNS);
+            }
             int numbOfCol = savedSettings.getInt(getString(R.string.number_of_columns_pref_key), FragmentArtistGallery.DEFAULT_NUM_OF_COLUMNS);
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "numbOfCol = " + numbOfCol);
+            }
             numberOfColumnsText.setText(getString(R.string.number_of_column_value, numbOfCol));
         }
     }
@@ -520,6 +785,29 @@ public class SettingsActivity extends AppCompatActivity
             editor.apply();
         }
     };
+    private OnClickListener showClientFormAccessButtonClicButtonlistener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (BuildConfig.DEBUG) {
+                Log.i(TAG, "showClientFormAccessButtonClicButtonlistener::onClick");
+            }
+            ToggleButton showClientFormAccessButtonToggle = (ToggleButton) v;
+            SharedPreferences.Editor editor = savedSettings.edit();
+            if (showClientFormAccessButtonToggle.isChecked()) {
+                editor.putBoolean(getString(R.string.show_client_form_access_button_pref_key), true);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "showClientFormAccessButtonClicButtonlistener::onClick__ON");
+                }
+            } else {
+                editor.putBoolean(getString(R.string.show_client_form_access_button_pref_key), false);
+                if (BuildConfig.DEBUG) {
+                    Log.i(TAG, "showClientFormAccessButtonClicButtonlistener::onClick__OFF");
+                }
+            }
+            editor.apply();
+        }
+    };
+
     public void updateWelcomeText(String newWelcomeText) {
         // DialogFragmentXMLFileAddressEdit notifies us that a new value has been entered for waiting delay
         if (BuildConfig.DEBUG) {
@@ -622,13 +910,4 @@ public class SettingsActivity extends AppCompatActivity
         //show confirm message
         SimpleDialogs.displayValueSetConfirmToast(this);
     }
-
-
-
-
-
-
-
-
-
 }
