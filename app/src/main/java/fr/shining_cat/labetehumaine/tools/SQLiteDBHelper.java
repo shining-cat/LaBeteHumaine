@@ -74,7 +74,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
     private static final String SQL_SELECT_ALL_RECORDS = "SELECT * FROM " + TABLE_NAME + ";";
 
     //Delete table query
-    private static final String SQL_DELETE_CLIENTS = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    private static final String SQL_DELETE_CLIENTS = "DROP TABLE IF EXISTS " + TABLE_NAME + ";";
 
     public SQLiteDBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -188,6 +188,7 @@ public class SQLiteDBHelper extends SQLiteOpenHelper {
                 allClientsRecordsList.add(clientRecord);
             } while (cursor.moveToNext());
         }
+        cursor.close();
         db.close();
         return allClientsRecordsList;
     }
