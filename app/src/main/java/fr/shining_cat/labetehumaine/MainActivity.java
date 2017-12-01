@@ -96,6 +96,9 @@ public class MainActivity extends AppCompatActivity
                 getString(R.string.custom_welcome_text_pref_key), getString(R.string.welcome_text_default));
         welcomeTextView.setText(welcomeText);
 
+
+
+
         idleDelay = savedSettings.getInt(getString(R.string.waiting_delay_pref_key), INITIAL_WAITING_DELAY);
         Long lastDlXML = savedSettings.getLong(getString(R.string.xml_file_last_download_pref_key), 0);
         Long lastDldatas = savedSettings.getLong(getString(R.string.datas_last_download_pref_key), 0);
@@ -165,6 +168,7 @@ public class MainActivity extends AppCompatActivity
         super.onStart();
         goToRestingScreen();
         hideSystemUI();
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -388,6 +392,10 @@ public class MainActivity extends AppCompatActivity
         }
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        if(savedSettings==null)savedSettings = getSharedPreferences(SETTINGS_FILE_NAME, MODE_PRIVATE);
+        Boolean showClientFormAccessButton = savedSettings.getBoolean(getString(R.string.show_client_form_access_button_pref_key), false);
+        MenuItem clientFormAccessButton = menu.findItem(R.id.open_form_button);
+        clientFormAccessButton.setVisible(showClientFormAccessButton && BeteHumaineDatas.getInstance().hasDatasReady()); //if you try to open the form when no data is there it will crash. the test is done here since it has no sense to let the user access this form when it will not be able to let him chose between artists, having none to show
         return true;
     }
 

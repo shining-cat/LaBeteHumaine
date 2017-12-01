@@ -152,7 +152,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="0dp"
                         android:text="@string/datas_last_download_label"
-                        android:id="@+id/textView2"
                         android:layout_weight="3"
                         android:textStyle="bold" />
 
@@ -198,7 +197,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/waiting_delay_label"
-                        android:id="@+id/textView8"
                         android:textStyle="bold" />
 
                     <TextView
@@ -513,6 +511,248 @@
                     android:textOff="@string/admin_code_toggle_inactive"/>
 
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/dividerVertical"/>
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/activate_client_form_toggle_button"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activate_client_form_label"
+                        android:layout_gravity="left"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/activate_client_form_explanation"
+                        android:layout_gravity="left"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activate_client_form_toggle_button"
+                    android:layout_gravity="right"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:textOn="@string/activate_client_form_toggle_active"
+                    android:textOff="@string/activate_client_form_toggle_inactive"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="?android:attr/dividerVertical"/>
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_idle_delay_label"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/form_idle_delay_value"
+                        android:id="@+id/form_idle_delay_textfield"
+                        android:layout_gravity="center_vertical|left"
+                        android:layout_alignParentStart="true"
+                        android:layout_toLeftOf="@+id/form_idle_edit_button"
+                        android:layout_centerVertical="true"
+                        android:textStyle="italic" />
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_button_label"
+                    android:id="@+id/form_idle_delay_edit_button"
+                    android:layout_gravity="right"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerVertical"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/email_export_address_edit_button"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email_export_address_label"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/email_export_address_text_default"
+                        android:id="@+id/email_export_address_editText"
+                        android:textStyle="italic" />
+
+
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/edit_button_label"
+                    android:id="@+id/email_export_address_edit_button"
+                    android:layout_gravity="center_vertical"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerVertical"/>
+
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/clients_db_export_button"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:text="@string/clients_db_last_export_label"
+                        android:layout_weight="3"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clients_db_last_export_text_default"
+                        android:id="@+id/clients_db_last_export_text"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clients_db_export_button_label"
+                    android:id="@+id/clients_db_export_button"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/dividerVertical"/>
+            <RelativeLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|left"
+                    android:layout_alignParentStart="true"
+                    android:layout_toLeftOf="@+id/erase_clients_db_button"
+                    android:layout_centerVertical="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:text="@string/clients_db_erase_label"
+                        android:layout_weight="3"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/clients_db_erase_text_default"
+                        android:id="@+id/erase_clients_db_text"
+                        android:textStyle="italic" />
+
+                </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clients_db_erase_button_label"
+                    android:id="@+id/erase_clients_db_button"
+                    android:layout_gravity="center_vertical|right"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -535,7 +775,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/app_name"
-                        android:id="@+id/textView"
                         android:gravity="center_horizontal"
                         android:textStyle="bold" />
 
@@ -543,14 +782,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/app_description"
-                        android:id="@+id/textView3"
                         android:gravity="center_horizontal" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/app_version"
-                        android:id="@+id/textView4"
                         android:gravity="center_horizontal" />
                 </LinearLayout>
 
@@ -588,7 +825,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/app_made_by"
-                        android:id="@+id/textView5"
                         android:gravity="center_horizontal"
                         android:textStyle="bold" />
 
@@ -596,14 +832,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/app_made_name"
-                        android:id="@+id/textView7"
                         android:gravity="center_horizontal" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/contact"
-                        android:id="@+id/textView6"
                         android:gravity="center_horizontal" />
                 </LinearLayout>
 

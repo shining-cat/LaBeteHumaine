@@ -56,16 +56,7 @@
                     android:layout_toRightOf="@+id/labelFormWhichArtist"
                     android:inputType="textCapWords">
                 </RadioGroup>
-                <!-- <EditText
-                    android:id="@+id/editTextFormWhichArtist"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_toRightOf="@+id/labelFormWhichArtist"
-                    android:inputType="textCapWords"
-                    android:longClickable="false"
-                    android:textSize="10pt"/> -->
+
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
