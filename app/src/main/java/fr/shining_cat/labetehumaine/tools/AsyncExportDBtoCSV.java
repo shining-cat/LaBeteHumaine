@@ -97,7 +97,8 @@ public class AsyncExportDBtoCSV extends AsyncTask<String, String, String> {
             }
             return errorRetrievingDataFromDatabase;
         }
-        exportingDBDialog.setMessage(clientsDBComposingCSV);
+        //TODO : LEAK !! => pas de réf à UI ici!!!
+        //exportingDBDialog.setMessage(clientsDBComposingCSV);
         // compose string content
         StringBuilder builder = new StringBuilder();
         ClientDatas clientDatas = new ClientDatas();
@@ -114,7 +115,8 @@ public class AsyncExportDBtoCSV extends AsyncTask<String, String, String> {
         }
         String fileContent = builder.toString();
         //
-        exportingDBDialog.setMessage(clientsDBWritingCSVFile);
+        //TODO : LEAK !! => pas de réf à UI ici!!!
+        //exportingDBDialog.setMessage(clientsDBWritingCSVFile);
         SimpleDateFormat dateFormatForFileName = new SimpleDateFormat("yyyyMMdd");
         String firstRegistrationDate = allClientRecordsList.get(0).getRegistrationDateFormattedString(dateFormatForFileName);
         String lastRegistrationDate = allClientRecordsList.get(allClientRecordsList.size()-1).getRegistrationDateFormattedString(dateFormatForFileName);
