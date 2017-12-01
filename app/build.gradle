@@ -10,7 +10,7 @@ android {
         }
     }
     compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "fr.shining_cat.labetehumaine"
         minSdkVersion 21
@@ -35,7 +35,6 @@ dependencies {
     compile files('libs/picasso-2.5.2.jar')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support.constraint:constraint-layout:+'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-text
     compile 'org.apache.commons:commons-text:1.1'
     // https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
